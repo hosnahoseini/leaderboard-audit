@@ -1,0 +1,13 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Generating train split:   0%|          | 0/57477 [00:00<?, ? examples/s]Generating train split:  17%|█▋        | 10000/57477 [00:00<00:01, 33806.47 examples/s]Generating train split:  35%|███▍      | 20000/57477 [00:00<00:01, 36484.33 examples/s]Generating train split:  52%|█████▏    | 30000/57477 [00:00<00:00, 39789.91 examples/s]Generating train split:  70%|██████▉   | 40000/57477 [00:00<00:00, 42145.49 examples/s]Generating train split:  87%|████████▋ | 50000/57477 [00:01<00:00, 43130.19 examples/s]Generating train split: 100%|██████████| 57477/57477 [00:01<00:00, 41074.21 examples/s]Generating train split: 100%|██████████| 57477/57477 [00:01<00:00, 40354.52 examples/s]
+Repo card metadata block was not found. Setting CardData to empty.
+Checkpointed outputs after dataset 1/7: arena55k
+Checkpointed outputs after dataset 2/7: llm_judge_arena
+Traceback (most recent call last):
+  File "/u501/hoyarhos/clean_bt_rank/scripts/run_topk_vs_rigging_comparison.py", line 1616, in <module>
+    progress_df=progress_df,
+  File "/u501/hoyarhos/clean_bt_rank/scripts/run_topk_vs_rigging_comparison.py", line 1483, in main
+    )
+  File "/u501/hoyarhos/clean_bt_rank/scripts/run_topk_vs_rigging_comparison.py", line 249, in choose_stratified_random_ks
+    raise ValueError(f"Need at least three valid k regions, found only {len(regions)}.")
+ValueError: Need at least three valid k regions, found only 1.

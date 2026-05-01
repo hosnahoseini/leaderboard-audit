@@ -1,0 +1,5 @@
+/var/spool/slurm/d/job1430860/slurm_script: 4: source: not found
+Traceback (most recent call last):
+  File "/u501/hoyarhos/clean_bt_rank/scripts/run_arena_robustness_actions_needed.py", line 38, in <module>
+    from tests.verify_against_baseline import baseline_matchups_as_player_pairs
+ModuleNotFoundError: No module named 'tests.verify_against_baseline'

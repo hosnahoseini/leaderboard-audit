@@ -1,0 +1,89 @@
+Repo card metadata block was not found. Setting CardData to empty.
+/u501/hoyarhos/clean_bt_rank/scripts/run_player_kendall_influence_plots.py:515: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  fig.tight_layout(rect=(0.20, 0.03, 0.99, 0.93), pad=0.8)
+/u501/hoyarhos/clean_bt_rank/scripts/run_player_kendall_influence_plots.py:515: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  fig.tight_layout(rect=(0.20, 0.03, 0.99, 0.93), pad=0.8)
+/u501/hoyarhos/clean_bt_rank/scripts/run_player_kendall_influence_plots.py:515: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  fig.tight_layout(rect=(0.20, 0.03, 0.99, 0.93), pad=0.8)
+/u501/hoyarhos/clean_bt_rank/scripts/run_player_kendall_influence_plots.py:515: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  fig.tight_layout(rect=(0.20, 0.03, 0.99, 0.93), pad=0.8)
+/u501/hoyarhos/clean_bt_rank/scripts/run_player_kendall_influence_plots.py:515: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  fig.tight_layout(rect=(0.20, 0.03, 0.99, 0.93), pad=0.8)
+/u501/hoyarhos/clean_bt_rank/scripts/run_player_kendall_influence_plots.py:515: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  fig.tight_layout(rect=(0.20, 0.03, 0.99, 0.93), pad=0.8)
+/u501/hoyarhos/clean_bt_rank/scripts/run_player_kendall_influence_plots.py:515: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  fig.tight_layout(rect=(0.20, 0.03, 0.99, 0.93), pad=0.8)
+Running datasets: ('tennis_top10_atp', 'mt_bench_human', 'webdev_arena', 'vision_arena', 'llm_judge_arena', 'arena55k', 'nba_elo_top50')
+Output dir: /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots
+Plotting tennis_top10_atp (ATP Top-10 Matchups (2020-2024)) | matches=278 players=10
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/tennis_top10_atp__player_kendall_player_stats.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/tennis_top10_atp__player_kendall_match_report.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/tennis_top10_atp__player_kendall_rating_summary.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/tennis_top10_atp__player_kendall_influence_distribution_markers.pdf
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/tennis_top10_atp__player_kendall_influence_distribution_markers.png
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/tennis_top10_atp_most_influential_rank_shift.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/tennis_top10_atp_player_kendall_most_influential_rank_shift.pdf
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/tennis_top10_atp_player_kendall_most_influential_rank_shift.png
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/tennis_top10_atp__player_kendall_plot_inputs.json
+Plotting mt_bench_human (MT-Bench Human Judgments) | matches=3355 players=6
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/mt_bench_human__player_kendall_player_stats.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/mt_bench_human__player_kendall_match_report.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/mt_bench_human__player_kendall_rating_summary.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/mt_bench_human__player_kendall_influence_distribution_markers.pdf
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/mt_bench_human__player_kendall_influence_distribution_markers.png
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/mt_bench_human_most_influential_rank_shift.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/mt_bench_human_player_kendall_most_influential_rank_shift.pdf
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/mt_bench_human_player_kendall_most_influential_rank_shift.png
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/mt_bench_human__player_kendall_plot_inputs.json
+Plotting webdev_arena (WebDev Arena) | matches=10501 players=13
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/webdev_arena__player_kendall_player_stats.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/webdev_arena__player_kendall_match_report.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/webdev_arena__player_kendall_rating_summary.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/webdev_arena__player_kendall_influence_distribution_markers.pdf
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/webdev_arena__player_kendall_influence_distribution_markers.png
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/webdev_arena_most_influential_rank_shift.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/webdev_arena_player_kendall_most_influential_rank_shift.pdf
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/webdev_arena_player_kendall_most_influential_rank_shift.png
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/webdev_arena__player_kendall_plot_inputs.json
+Plotting vision_arena (Vision Arena) | matches=29849 players=17
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/vision_arena__player_kendall_player_stats.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/vision_arena__player_kendall_match_report.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/vision_arena__player_kendall_rating_summary.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/vision_arena__player_kendall_influence_distribution_markers.pdf
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/vision_arena__player_kendall_influence_distribution_markers.png
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/vision_arena_most_influential_rank_shift.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/vision_arena_player_kendall_most_influential_rank_shift.pdf
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/vision_arena_player_kendall_most_influential_rank_shift.png
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/vision_arena__player_kendall_plot_inputs.json
+Plotting llm_judge_arena (Chatbot Arena LLM Judges) | matches=49938 players=64
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/llm_judge_arena__player_kendall_player_stats.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/llm_judge_arena__player_kendall_match_report.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/llm_judge_arena__player_kendall_rating_summary.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/llm_judge_arena__player_kendall_influence_distribution_markers.pdf
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/llm_judge_arena__player_kendall_influence_distribution_markers.png
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/llm_judge_arena_most_influential_rank_shift.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/llm_judge_arena_player_kendall_most_influential_rank_shift.pdf
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/llm_judge_arena_player_kendall_most_influential_rank_shift.png
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/llm_judge_arena__player_kendall_plot_inputs.json
+Plotting arena55k (Chatbot Arena 55k) | matches=57477 players=64
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/arena55k__player_kendall_player_stats.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/arena55k__player_kendall_match_report.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/arena55k__player_kendall_rating_summary.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/arena55k__player_kendall_influence_distribution_markers.pdf
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/arena55k__player_kendall_influence_distribution_markers.png
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/arena55k_most_influential_rank_shift.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/arena55k_player_kendall_most_influential_rank_shift.pdf
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/arena55k_player_kendall_most_influential_rank_shift.png
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/arena55k__player_kendall_plot_inputs.json
+Plotting nba_elo_top50 (NBA Elo Top-50 Teams) | matches=109892 players=50
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/nba_elo_top50__player_kendall_player_stats.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/nba_elo_top50__player_kendall_match_report.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/nba_elo_top50__player_kendall_rating_summary.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/nba_elo_top50__player_kendall_influence_distribution_markers.pdf
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/nba_elo_top50__player_kendall_influence_distribution_markers.png
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/nba_elo_top50_most_influential_rank_shift.csv
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/nba_elo_top50_player_kendall_most_influential_rank_shift.pdf
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/nba_elo_top50_player_kendall_most_influential_rank_shift.png
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/nba_elo_top50__player_kendall_plot_inputs.json
+Saved /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/player_kendall_influence_plots/player_kendall_influence_plot_run_metadata.json
+Done.

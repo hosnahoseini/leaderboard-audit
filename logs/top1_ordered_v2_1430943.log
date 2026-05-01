@@ -1,0 +1,11 @@
+Running tennis_top10_atp ...
+Traceback (most recent call last):
+  File "/u501/hoyarhos/clean_bt_rank/scripts/run_arena_robustness_actions_needed.py", line 520, in <module>
+    main()
+  File "/u501/hoyarhos/clean_bt_rank/scripts/run_arena_robustness_actions_needed.py", line 437, in main
+    summary_df, meta, baseline_df, selected_matches_df = run_dataset(
+  File "/u501/hoyarhos/clean_bt_rank/scripts/run_arena_robustness_actions_needed.py", line 391, in run_dataset
+    built = build_named_dataset_model(dataset_key)
+  File "/u501/hoyarhos/clean_bt_rank/scripts/run_arena_robustness_actions_needed.py", line 200, in build_named_dataset_model
+    dataset = BattleDataset.from_dataframe(battle)
+NameError: name 'BattleDataset' is not defined

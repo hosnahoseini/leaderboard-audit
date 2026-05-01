@@ -1,0 +1,13 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Using the latest cached version of the dataset since lmarena-ai/VisionArena-Battle couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /tmp/clean_bt_rank_hf_cache/lmarena-ai___vision_arena-battle/default/0.0.0/a41d58f15caa3e2d9685774153d2bc815b943d96 (last modified on Fri May  1 09:44:07 2026).
+Repo card metadata block was not found. Setting CardData to empty.
+Checkpointed outputs after dataset 1/7: tennis_top10_atp
+Checkpointed outputs after dataset 2/7: mt_bench_human
+Checkpointed outputs after dataset 3/7: webdev_arena
+Checkpointed outputs after dataset 4/7: vision_arena
+Checkpointed outputs after dataset 5/7: llm_judge_arena
+Generating train split:   0%|          | 0/57477 [00:00<?, ? examples/s]Generating train split:  17%|█▋        | 10000/57477 [00:00<00:01, 30111.10 examples/s]Generating train split:  35%|███▍      | 20000/57477 [00:00<00:01, 31183.51 examples/s]Generating train split:  52%|█████▏    | 30000/57477 [00:00<00:00, 32177.46 examples/s]Generating train split:  70%|██████▉   | 40000/57477 [00:01<00:00, 33143.07 examples/s]Generating train split:  87%|████████▋ | 50000/57477 [00:01<00:00, 32228.92 examples/s]Generating train split: 100%|██████████| 57477/57477 [00:01<00:00, 32223.78 examples/s]Generating train split: 100%|██████████| 57477/57477 [00:01<00:00, 32094.53 examples/s]
+Checkpointed outputs after dataset 6/7: arena55k
+Checkpointed outputs after dataset 7/7: nba_elo_top50
+Saved final outputs to /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/topk_vs_omni_on_all_datasets_small_to_large_3k_2tasks_5trials
