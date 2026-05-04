@@ -1,0 +1,58 @@
+Repo card metadata block was not found. Setting CardData to empty.
+Resolved dataset order:
+ 1. tennis_top10_atp (278 battle rows)
+ 2. mt_bench_human (3355 battle rows)
+ 3. webdev_arena (10501 battle rows)
+ 4. vision_arena (29849 battle rows)
+ 5. llm_judge_arena (49938 battle rows)
+ 6. arena55k (57477 battle rows)
+ 7. nba_elo_top50 (109892 battle rows)
+Running tennis_top10_atp ...
+{'dataset_key': 'tennis_top10_atp', 'variant': 'drop', 'action': 'drop', 'candidate_mode': None, 'max_actions': 28}
+{'dataset_key': 'tennis_top10_atp', 'variant': 'flip', 'action': 'flip', 'candidate_mode': None, 'max_actions': 28}
+{'dataset_key': 'tennis_top10_atp', 'variant': 'add_pairs', 'action': 'add', 'candidate_mode': 'all_pairs', 'max_actions': 28}
+{'dataset_key': 'tennis_top10_atp', 'variant': 'add_outcomes', 'action': 'add', 'candidate_mode': 'all_outcomes', 'max_actions': 28}
+{'dataset_key': 'tennis_top10_atp', 'variant': 'add_weighted', 'action': 'add', 'candidate_mode': 'weighted', 'max_actions': 28}
+Running mt_bench_human ...
+{'dataset_key': 'mt_bench_human', 'variant': 'drop', 'action': 'drop', 'candidate_mode': None, 'max_actions': 336}
+{'dataset_key': 'mt_bench_human', 'variant': 'flip', 'action': 'flip', 'candidate_mode': None, 'max_actions': 336}
+{'dataset_key': 'mt_bench_human', 'variant': 'add_pairs', 'action': 'add', 'candidate_mode': 'all_pairs', 'max_actions': 336}
+{'dataset_key': 'mt_bench_human', 'variant': 'add_outcomes', 'action': 'add', 'candidate_mode': 'all_outcomes', 'max_actions': 336}
+{'dataset_key': 'mt_bench_human', 'variant': 'add_weighted', 'action': 'add', 'candidate_mode': 'weighted', 'max_actions': 336}
+Running webdev_arena ...
+{'dataset_key': 'webdev_arena', 'variant': 'drop', 'action': 'drop', 'candidate_mode': None, 'max_actions': 1051}
+{'dataset_key': 'webdev_arena', 'variant': 'flip', 'action': 'flip', 'candidate_mode': None, 'max_actions': 1051}
+{'dataset_key': 'webdev_arena', 'variant': 'add_pairs', 'action': 'add', 'candidate_mode': 'all_pairs', 'max_actions': 1051}
+{'dataset_key': 'webdev_arena', 'variant': 'add_outcomes', 'action': 'add', 'candidate_mode': 'all_outcomes', 'max_actions': 1051}
+{'dataset_key': 'webdev_arena', 'variant': 'add_weighted', 'action': 'add', 'candidate_mode': 'weighted', 'max_actions': 1051}
+Running vision_arena ...
+{'dataset_key': 'vision_arena', 'variant': 'drop', 'action': 'drop', 'candidate_mode': None, 'max_actions': 2985}
+{'dataset_key': 'vision_arena', 'variant': 'flip', 'action': 'flip', 'candidate_mode': None, 'max_actions': 2985}
+{'dataset_key': 'vision_arena', 'variant': 'add_pairs', 'action': 'add', 'candidate_mode': 'all_pairs', 'max_actions': 2985}
+{'dataset_key': 'vision_arena', 'variant': 'add_outcomes', 'action': 'add', 'candidate_mode': 'all_outcomes', 'max_actions': 2985}
+{'dataset_key': 'vision_arena', 'variant': 'add_weighted', 'action': 'add', 'candidate_mode': 'weighted', 'max_actions': 2985}
+Running llm_judge_arena ...
+Repo card metadata block was not found. Setting CardData to empty.
+{'dataset_key': 'llm_judge_arena', 'variant': 'drop', 'action': 'drop', 'candidate_mode': None, 'max_actions': 500}
+{'dataset_key': 'llm_judge_arena', 'variant': 'flip', 'action': 'flip', 'candidate_mode': None, 'max_actions': 500}
+{'dataset_key': 'llm_judge_arena', 'variant': 'add_pairs', 'action': 'add', 'candidate_mode': 'all_pairs', 'max_actions': 500}
+{'dataset_key': 'llm_judge_arena', 'variant': 'add_outcomes', 'action': 'add', 'candidate_mode': 'all_outcomes', 'max_actions': 500}
+{'dataset_key': 'llm_judge_arena', 'variant': 'add_weighted', 'action': 'add', 'candidate_mode': 'weighted', 'max_actions': 500}
+Running arena55k ...
+{'dataset_key': 'arena55k', 'variant': 'drop', 'action': 'drop', 'candidate_mode': None, 'max_actions': 575}
+{'dataset_key': 'arena55k', 'variant': 'flip', 'action': 'flip', 'candidate_mode': None, 'max_actions': 575}
+{'dataset_key': 'arena55k', 'variant': 'add_pairs', 'action': 'add', 'candidate_mode': 'all_pairs', 'max_actions': 575}
+{'dataset_key': 'arena55k', 'variant': 'add_outcomes', 'action': 'add', 'candidate_mode': 'all_outcomes', 'max_actions': 575}
+{'dataset_key': 'arena55k', 'variant': 'add_weighted', 'action': 'add', 'candidate_mode': 'weighted', 'max_actions': 575}
+Running nba_elo_top50 ...
+{'dataset_key': 'nba_elo_top50', 'variant': 'drop', 'action': 'drop', 'candidate_mode': None, 'max_actions': 1099}
+{'dataset_key': 'nba_elo_top50', 'variant': 'flip', 'action': 'flip', 'candidate_mode': None, 'max_actions': 1099}
+{'dataset_key': 'nba_elo_top50', 'variant': 'add_pairs', 'action': 'add', 'candidate_mode': 'all_pairs', 'max_actions': 1099}
+{'dataset_key': 'nba_elo_top50', 'variant': 'add_outcomes', 'action': 'add', 'candidate_mode': 'all_outcomes', 'max_actions': 1099}
+{'dataset_key': 'nba_elo_top50', 'variant': 'add_weighted', 'action': 'add', 'candidate_mode': 'weighted', 'max_actions': 1099}
+Traceback (most recent call last):
+  File "/u501/hoyarhos/clean_bt_rank/scripts/run_arena_robustness_actions_needed.py", line 442, in <module>
+    main()
+  File "/u501/hoyarhos/clean_bt_rank/scripts/run_arena_robustness_actions_needed.py", line 436, in main
+    raise AssertionError("Baseline comparison mismatch detected.")
+AssertionError: Baseline comparison mismatch detected.

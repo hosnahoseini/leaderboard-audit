@@ -1,0 +1,6 @@
+dataset_key,dataset_name,direction,target_player,initial_rank,k,trial,trial_winner,influence_success,rigging_success,influence_exposures_seen,rigging_exposures_seen,influence_actions_used,rigging_actions_used,influence_rows_added,rigging_rows_added
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),promote,Holger Rune,5,3,0,influence_pair,True,True,18,18,18,18,18,18
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),promote,Holger Rune,5,3,1,influence_pair,True,True,32,37,32,37,32,37
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),promote,Holger Rune,5,3,2,influence_pair,True,True,38,38,38,38,38,38
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),promote,Holger Rune,5,3,3,influence_pair,True,True,25,25,25,25,25,25
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),promote,Holger Rune,5,3,4,influence_pair,True,True,9,9,9,9,9,9

@@ -1,0 +1,48 @@
+{
+  "datasets": [
+    "tennis_top10_atp",
+    "mt_bench_human",
+    "webdev_arena",
+    "vision_arena",
+    "llm_judge_arena",
+    "arena55k",
+    "nba_elo_top50"
+  ],
+  "dataset_order": "size_asc",
+  "size_rows": [
+    [
+      "tennis_top10_atp",
+      278
+    ],
+    [
+      "mt_bench_human",
+      3355
+    ],
+    [
+      "webdev_arena",
+      10501
+    ],
+    [
+      "vision_arena",
+      29849
+    ],
+    [
+      "llm_judge_arena",
+      49938
+    ],
+    [
+      "arena55k",
+      57477
+    ],
+    [
+      "nba_elo_top50",
+      109892
+    ]
+  ],
+  "max_action_fraction": 0.1,
+  "ci_method": "gao_local",
+  "ci_alpha": 0.05,
+  "ci_objective": "boundary",
+  "k_selection_mode": "meaningful",
+  "smallest_runnable": false
+}

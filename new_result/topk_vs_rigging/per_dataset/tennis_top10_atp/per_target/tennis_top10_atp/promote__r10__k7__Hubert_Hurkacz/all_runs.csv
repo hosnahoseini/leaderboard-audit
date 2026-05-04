@@ -1,0 +1,11 @@
+dataset_key,dataset_name,target_player,direction,k,method,policy,trial,success,actions_used,rows_added,exposures_seen,initial_rank,final_rank,final_metric_value
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Hubert Hurkacz,promote,7,influence_pair,pairwise_influence,0,True,19,19,19,10,7,0.036152678177700626
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Hubert Hurkacz,promote,7,rigging,omni_bt_diff,0,True,21,21,21,10,7,-0.12107515860470519
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Hubert Hurkacz,promote,7,influence_pair,pairwise_influence,1,True,15,15,15,10,7,0.06857617531614113
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Hubert Hurkacz,promote,7,rigging,omni_bt_diff,1,True,17,17,17,10,7,-0.029654025004809847
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Hubert Hurkacz,promote,7,influence_pair,pairwise_influence,2,True,28,28,28,10,7,0.0010223693230342334
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Hubert Hurkacz,promote,7,rigging,omni_bt_diff,2,True,23,23,23,10,7,-0.1604490578438844
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Hubert Hurkacz,promote,7,influence_pair,pairwise_influence,3,True,29,29,29,10,7,0.03207762353355115
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Hubert Hurkacz,promote,7,rigging,omni_bt_diff,3,True,26,26,26,10,7,-0.13335104764557926
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Hubert Hurkacz,promote,7,influence_pair,pairwise_influence,4,True,19,19,19,10,7,0.0009531040318688788
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Hubert Hurkacz,promote,7,rigging,omni_bt_diff,4,True,24,24,24,10,7,-0.06545553370387958

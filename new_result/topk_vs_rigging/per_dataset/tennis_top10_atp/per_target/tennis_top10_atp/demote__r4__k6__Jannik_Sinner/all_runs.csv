@@ -1,0 +1,11 @@
+dataset_key,dataset_name,target_player,direction,k,method,policy,trial,success,actions_used,rows_added,exposures_seen,initial_rank,final_rank,final_metric_value
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Jannik Sinner,demote,6,influence_pair,pairwise_influence,0,True,37,37,37,4,7,0.007739244377304
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Jannik Sinner,demote,6,rigging,omni_bt_diff,0,True,36,36,36,4,7,-0.29703709916454524
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Jannik Sinner,demote,6,influence_pair,pairwise_influence,1,True,29,29,29,4,7,0.002519595552015863
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Jannik Sinner,demote,6,rigging,omni_bt_diff,1,True,29,29,29,4,7,-0.3473287186959626
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Jannik Sinner,demote,6,influence_pair,pairwise_influence,2,True,29,29,29,4,7,0.005404820999015403
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Jannik Sinner,demote,6,rigging,omni_bt_diff,2,True,34,34,34,4,7,-0.2784704079337028
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Jannik Sinner,demote,6,influence_pair,pairwise_influence,3,True,25,25,25,4,7,0.025368155862800057
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Jannik Sinner,demote,6,rigging,omni_bt_diff,3,True,26,26,26,4,7,-0.3427948099071001
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Jannik Sinner,demote,6,influence_pair,pairwise_influence,4,True,28,28,28,4,7,0.009986213974631397
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Jannik Sinner,demote,6,rigging,omni_bt_diff,4,True,28,28,28,4,7,-0.23337956660009218

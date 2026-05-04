@@ -1,0 +1,11 @@
+dataset_key,dataset_name,target_player,direction,k,method,policy,trial,success,actions_used,rows_added,exposures_seen,initial_rank,final_rank,final_metric_value
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,7,influence_pair,pairwise_influence,0,True,23,23,23,6,8,0.0060718011157001595
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,7,rigging,omni_bt_diff,0,True,16,16,16,6,8,-0.20772693204144366
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,7,influence_pair,pairwise_influence,1,True,26,26,26,6,8,0.013400931095392865
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,7,rigging,omni_bt_diff,1,True,22,22,22,6,8,-0.016993980005599818
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,7,influence_pair,pairwise_influence,2,True,30,30,30,6,8,0.019346554707284414
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,7,rigging,omni_bt_diff,2,True,20,20,20,6,8,-0.09014894591016676
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,7,influence_pair,pairwise_influence,3,True,24,24,24,6,8,0.01298264149033379
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,7,rigging,omni_bt_diff,3,True,20,20,20,6,8,-0.10966229389306181
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,7,influence_pair,pairwise_influence,4,True,24,24,24,6,8,0.005592041362415312
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,7,rigging,omni_bt_diff,4,True,20,20,20,6,8,-0.19844162985861602

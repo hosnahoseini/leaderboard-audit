@@ -50,32 +50,61 @@ def fit_model_from_state(base_model: BradleyTerryModel, state: ExperimentState) 
     return model
 
 
+def _paired_row_positions(frame: pd.DataFrame, row_uid: int) -> np.ndarray:
+    row_mask = frame["row_uid"].to_numpy(dtype=int) == int(row_uid)
+    if row_mask.sum() != 1:
+        raise ValueError(f"Could not find a unique row with row_uid={row_uid}.")
+
+    if {"match_id", "match_copy"}.issubset(frame.columns):
+        match_id = int(frame.loc[row_mask, "match_id"].iloc[0])
+        return np.flatnonzero(frame["match_id"].to_numpy(dtype=int) == match_id)
+    return np.flatnonzero(row_mask)
+
+
+def _next_match_id(frame: pd.DataFrame) -> int:
+    if "match_id" not in frame.columns or frame.empty:
+        return 0
+    return int(frame["match_id"].max()) + 1
+
+
 def apply_add_candidate(state: ExperimentState, chosen: pd.Series) -> ExperimentState:
-    new_frame_row = pd.DataFrame(
+    outcome = float(chosen.get("outcome", 1.0))
+    match_id = int(chosen.get("match_id", _next_match_id(state.frame)))
+    forward_x = np.asarray(chosen["_candidate_x"], dtype=float)
+    reverse_x = -forward_x
+    new_frame_rows = pd.DataFrame(
         [
             {
                 "model_a": chosen["model_a"],
                 "model_b": chosen["model_b"],
-                "winner": float(chosen.get("outcome", 1.0)),
-                "outcome": float(chosen.get("outcome", 1.0)),
-                "match_id": int(chosen.get("match_id", -1)),
-                "match_copy": "added",
+                "winner": outcome,
+                "outcome": outcome,
+                "match_id": match_id,
+                "match_copy": "forward",
                 "row_uid": state.next_row_uid,
-            }
+            },
+            {
+                "model_a": chosen["model_b"],
+                "model_b": chosen["model_a"],
+                "winner": 1.0 - outcome,
+                "outcome": 1.0 - outcome,
+                "match_id": match_id,
+                "match_copy": "reverse",
+                "row_uid": state.next_row_uid + 1,
+            },
         ]
     )
     return ExperimentState(
-        X=np.vstack([state.X, np.asarray(chosen["_candidate_x"], dtype=float)]),
-        y=np.append(state.y, float(chosen.get("outcome", 1.0))),
-        frame=pd.concat([state.frame, new_frame_row], ignore_index=True),
-        next_row_uid=state.next_row_uid + 1,
+        X=np.vstack([state.X, forward_x, reverse_x]),
+        y=np.append(state.y, [outcome, 1.0 - outcome]),
+        frame=pd.concat([state.frame, new_frame_rows], ignore_index=True),
+        next_row_uid=state.next_row_uid + 2,
     )
 
 
 def apply_drop_row(state: ExperimentState, row_uid: int) -> ExperimentState:
-    row_pos = row_position(state.frame, row_uid)
     mask = np.ones(len(state.frame), dtype=bool)
-    mask[row_pos] = False
+    mask[_paired_row_positions(state.frame, row_uid)] = False
     return ExperimentState(
         X=state.X[mask],
         y=state.y[mask],
@@ -85,7 +114,7 @@ def apply_drop_row(state: ExperimentState, row_uid: int) -> ExperimentState:
 
 
 def apply_flip_row(state: ExperimentState, row_uid: int) -> ExperimentState:
-    row_pos = row_position(state.frame, row_uid)
+    row_pos = _paired_row_positions(state.frame, row_uid)
     new_y = state.y.copy()
     new_y[row_pos] = 1.0 - new_y[row_pos]
     frame = state.frame.copy()
@@ -97,9 +126,9 @@ def apply_flip_row(state: ExperimentState, row_uid: int) -> ExperimentState:
 
 
 def row_position(frame: pd.DataFrame, row_uid: int) -> int:
-    matches = np.flatnonzero(frame["row_uid"].to_numpy(dtype=int) == int(row_uid))
+    matches = _paired_row_positions(frame, row_uid)
     if matches.size != 1:
-        raise ValueError(f"Could not find a unique row with row_uid={row_uid}.")
+        raise ValueError(f"row_uid={row_uid} belongs to a paired logical match, not a unique row.")
     return int(matches[0])
 
 
@@ -115,4 +144,3 @@ def is_target_favored(row: pd.Series, target_player: str) -> bool:
     if str(row["model_b"]) == target_player:
         return float(row.get("outcome", row.get("winner", 1.0))) <= 0.5
     return False
-

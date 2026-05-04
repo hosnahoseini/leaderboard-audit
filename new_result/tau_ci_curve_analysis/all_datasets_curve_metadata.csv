@@ -1,0 +1,8 @@
+dataset_key,dataset_name,n_original_matches,n_fitted_rows,n_models,top1,top2,tau_temperature,curve_steps_requested
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),278,556,10,Novak Djokovic,Carlos Alcaraz,0.5,25
+mt_bench_human,MT-Bench Human Judgments,3355,6710,6,gpt-4,claude-v1,0.5,25
+webdev_arena,WebDev Arena,10501,21002,13,claude-3-5-sonnet-20241022,claude-3-5-haiku-20241022,0.5,25
+vision_arena,Vision Arena,29849,59698,17,gemini-1.5-pro-exp-0801,gpt-4o-2024-05-13,0.5,25
+llm_judge_arena,Chatbot Arena LLM Judges,49938,99876,64,gpt-4-1106-preview,gpt-4-0125-preview,0.5,25
+arena55k,Chatbot Arena 55k,57477,114954,64,gpt-4-1106-preview,gpt-4-0125-preview,0.5,25
+nba_elo_top50,NBA Elo Top-50 Teams,109892,219784,50,LAL,SAS,0.5,25

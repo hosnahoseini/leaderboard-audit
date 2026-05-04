@@ -10,6 +10,22 @@ from .objectives import Objective, compute_objective_action_influence
 from .reporting import make_objective_influence_report
 
 
+def _paired_action_mask(frame: pd.DataFrame, selected_matches: pd.DataFrame) -> np.ndarray:
+    chosen_uids = set(int(v) for v in selected_matches["row_uid"].to_list())
+    base_mask = frame["row_uid"].astype(int).isin(chosen_uids).to_numpy()
+    if not {"match_id", "match_copy"}.issubset(frame.columns):
+        return base_mask
+
+    chosen_match_ids = set(frame.loc[base_mask, "match_id"].astype(int).tolist())
+    return frame["match_id"].astype(int).isin(chosen_match_ids).to_numpy()
+
+
+def _next_match_id(frame: pd.DataFrame) -> int:
+    if "match_id" not in frame.columns or frame.empty:
+        return 0
+    return int(frame["match_id"].max()) + 1
+
+
 def build_action_candidate_report(
     bt_model: BradleyTerryModel,
     objective: Objective,
@@ -133,8 +149,7 @@ def refit_after_action_subset(
 
     action = action.lower()
     if action in {"drop", "flip"}:
-        chosen_uids = set(int(v) for v in selected_matches["row_uid"].to_list())
-        mask = frame["row_uid"].isin(chosen_uids).to_numpy()
+        mask = _paired_action_mask(frame, selected_matches)
         if action == "drop":
             x = x[~mask]
             y = y[~mask]
@@ -148,15 +163,48 @@ def refit_after_action_subset(
     elif action == "add":
         if "_candidate_x" not in selected_matches.columns:
             raise ValueError("selected_matches must contain '_candidate_x' for action='add'.")
-        add_x = np.vstack(selected_matches["_candidate_x"].to_list()).astype(float)
-        add_y = (
-            selected_matches["outcome"].to_numpy(dtype=float)
-            if "outcome" in selected_matches.columns
-            else np.ones(len(selected_matches), dtype=float)
-        )
-        x = np.vstack([x, add_x])
-        y = np.concatenate([y, add_y])
-        frame = pd.concat([frame, selected_matches.copy()], ignore_index=True)
+        add_x_rows: list[np.ndarray] = []
+        add_y_rows: list[float] = []
+        add_frame_rows: list[dict[str, object]] = []
+        next_row_uid = int(frame["row_uid"].max()) + 1 if len(frame) else 0
+        next_match_id = _next_match_id(frame)
+
+        for _, row in selected_matches.reset_index(drop=True).iterrows():
+            outcome = float(row["outcome"]) if "outcome" in row.index else 1.0
+            match_id = int(row["match_id"]) if "match_id" in row.index and pd.notna(row["match_id"]) else next_match_id
+            next_match_id = max(next_match_id, match_id + 1)
+            forward_x = np.asarray(row["_candidate_x"], dtype=float)
+            reverse_x = -forward_x
+
+            add_x_rows.extend([forward_x, reverse_x])
+            add_y_rows.extend([outcome, 1.0 - outcome])
+            add_frame_rows.extend(
+                [
+                    {
+                        "model_a": row["model_a"],
+                        "model_b": row["model_b"],
+                        "winner": outcome,
+                        "outcome": outcome,
+                        "match_id": match_id,
+                        "match_copy": "forward",
+                        "row_uid": next_row_uid,
+                    },
+                    {
+                        "model_a": row["model_b"],
+                        "model_b": row["model_a"],
+                        "winner": 1.0 - outcome,
+                        "outcome": 1.0 - outcome,
+                        "match_id": match_id,
+                        "match_copy": "reverse",
+                        "row_uid": next_row_uid + 1,
+                    },
+                ]
+            )
+            next_row_uid += 2
+
+        x = np.vstack([x, np.vstack(add_x_rows).astype(float)])
+        y = np.concatenate([y, np.asarray(add_y_rows, dtype=float)])
+        frame = pd.concat([frame, pd.DataFrame(add_frame_rows)], ignore_index=True)
     else:
         raise ValueError("action must be 'drop', 'flip', or 'add'.")
 

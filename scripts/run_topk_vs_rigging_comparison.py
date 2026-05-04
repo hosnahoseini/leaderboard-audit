@@ -25,7 +25,7 @@ import pandas as pd
 from matplotlib.lines import Line2D
 
 from clean_bt_rank import SkillGapObjective, available_hf_battle_datasets, use_paper_rc
-from clean_bt_rank.ci_aware_actions_needed import build_named_dataset_model
+from clean_bt_rank.ci_aware_actions_needed import build_named_dataset_model, clear_model_cache, load_named_battle_row_count
 from clean_bt_rank.experiments._common import apply_add_candidate, fit_model_from_state, make_state, ranking_frame
 from clean_bt_rank.objectives import compute_objective_action_influence
 
@@ -132,6 +132,12 @@ def parse_args() -> argparse.Namespace:
         help="Dataset keys to evaluate. Default: all available datasets.",
     )
     parser.add_argument(
+        "--dataset-order",
+        choices=("alpha", "size_asc", "size_desc"),
+        default="size_asc",
+        help="How to order datasets before running the batch.",
+    )
+    parser.add_argument(
         "--k",
         type=int,
         default=None,
@@ -196,6 +202,22 @@ def parse_args() -> argparse.Namespace:
         help="If a dataset cannot be loaded or evaluated, record the failure in dataset_progress.csv and continue.",
     )
     return parser.parse_args()
+
+
+def resolve_dataset_order(dataset_keys: list[str], order_mode: str) -> tuple[list[str], list[tuple[str, int]]]:
+    keys = [str(key) for key in dataset_keys]
+    if order_mode == "alpha":
+        ordered = sorted(keys)
+        return ordered, []
+
+    size_rows: list[tuple[str, int]] = []
+    for key in keys:
+        size_rows.append((key, load_named_battle_row_count(key)))
+
+    reverse = order_mode == "size_desc"
+    size_rows.sort(key=lambda item: (item[1], item[0]), reverse=reverse)
+    ordered = [key for key, _ in size_rows]
+    return ordered, size_rows
 
 
 def _style_axis(ax: plt.Axes, *, grid_axis: str = "y") -> None:
@@ -1558,7 +1580,18 @@ def write_per_target_outputs(
 def main() -> int:
     args = parse_args()
     use_paper_rc()
+    ordered_datasets, size_rows = resolve_dataset_order(list(args.datasets), args.dataset_order)
+    args.datasets = ordered_datasets
     args.output_dir.mkdir(parents=True, exist_ok=True)
+
+    print("Resolved dataset order:", flush=True)
+    for idx, dataset_key in enumerate(args.datasets, start=1):
+        size_suffix = ""
+        for key, n_rows in size_rows:
+            if key == dataset_key:
+                size_suffix = f" ({n_rows} battle rows)"
+                break
+        print(f"{idx:>2}. {dataset_key}{size_suffix}", flush=True)
 
     if args.replot_from_csv:
         replot_existing_outputs(args.output_dir)
@@ -1628,6 +1661,7 @@ def main() -> int:
                 f"Skipped dataset {dataset_index}/{len(args.datasets)} due to error: {dataset_key} ({type(exc).__name__}: {exc})",
                 flush=True,
             )
+            clear_model_cache(dataset_key)
             continue
 
         bt_model = built["bt_model"]
@@ -1699,6 +1733,7 @@ def main() -> int:
             }
         )
         completed_dataset_keys.add(dataset_key)
+        clear_model_cache(dataset_key)
         progress_df = pd.DataFrame(progress_rows)
         frames = materialize_outputs(run_rows=run_rows, task_rows=task_rows, decision_rows=decision_rows, budget=args.budget)
         write_outputs(

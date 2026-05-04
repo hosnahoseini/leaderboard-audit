@@ -13,7 +13,7 @@ os.environ.setdefault("MPLCONFIGDIR", "/tmp/matplotlib")
 Path(os.environ["MPLCONFIGDIR"]).mkdir(parents=True, exist_ok=True)
 
 ROOT = Path(__file__).resolve().parents[1]
-for path in [ROOT / "src", ROOT, ROOT / "IsRankingRobust"]:
+for path in [ROOT / "src", ROOT, ROOT / "tests", ROOT / "IsRankingRobust"]:
     if str(path) not in sys.path:
         sys.path.insert(0, str(path))
 
@@ -36,7 +36,7 @@ from clean_bt_rank import (
 )
 from clean_bt_rank.iterative_actions import gap_based_objective_search_across_player_pairs
 from package.RankAMIP.logistic import isRankingRobust
-from tests.verify_against_baseline import baseline_matchups_as_player_pairs
+from verify_against_baseline import baseline_matchups_as_player_pairs
 
 
 VARIANTS = [
@@ -56,6 +56,12 @@ def parse_args() -> argparse.Namespace:
         nargs="*",
         default=sorted(available_hf_battle_datasets()),
         help="Dataset keys to run. Default: all available datasets.",
+    )
+    parser.add_argument(
+        "--dataset-order",
+        choices=("alpha", "size_asc", "size_desc"),
+        default="size_asc",
+        help="How to order datasets before running the batch.",
     )
     parser.add_argument(
         "--output-dir",
@@ -79,6 +85,23 @@ def parse_args() -> argparse.Namespace:
 
 def compute_max_actions(n_rows: int, fraction: float) -> int:
     return max(1, int(np.ceil(float(fraction) * int(n_rows))))
+
+
+def resolve_dataset_order(dataset_keys: list[str], order_mode: str) -> tuple[list[str], list[tuple[str, int]]]:
+    keys = [str(key) for key in dataset_keys]
+    if order_mode == "alpha":
+        ordered = sorted(keys)
+        return ordered, []
+
+    size_rows: list[tuple[str, int]] = []
+    for key in keys:
+        loaded = load_named_battle_data(key)
+        size_rows.append((key, int(len(loaded.battle_frame))))
+
+    reverse = order_mode == "size_desc"
+    size_rows.sort(key=lambda item: (item[1], item[0]), reverse=reverse)
+    ordered = [key for key, _ in size_rows]
+    return ordered, size_rows
 
 
 def max_action_fraction_for_dataset(dataset_key: str, override: float | None = None) -> float:
@@ -318,7 +341,15 @@ def main() -> None:
     output_dir = args.output_dir.expanduser().resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    dataset_keys = list(args.datasets)
+    dataset_keys, size_rows = resolve_dataset_order(list(args.datasets), args.dataset_order)
+    print("Resolved dataset order:", flush=True)
+    for idx, dataset_key in enumerate(dataset_keys, start=1):
+        size_suffix = ""
+        for key, n_rows in size_rows:
+            if key == dataset_key:
+                size_suffix = f" ({n_rows} battle rows)"
+                break
+        print(f"{idx:>2}. {dataset_key}{size_suffix}", flush=True)
     all_rows = []
     all_baseline_rows = []
     all_selected_match_rows = []

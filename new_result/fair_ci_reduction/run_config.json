@@ -1,0 +1,29 @@
+{
+  "budget": 12,
+  "candidate_mode": "all_pairs",
+  "ci_method": "gao_local",
+  "dataset_keys": [
+    "tennis_top10_atp",
+    "mt_bench_human",
+    "webdev_arena",
+    "vision_arena",
+    "llm_judge_arena",
+    "arena55k",
+    "nba_elo_top50"
+  ],
+  "influence_method": "1sn",
+  "min_matches": 20,
+  "n_random_trials": 0,
+  "policies": [
+    "influence",
+    "arena_active"
+  ],
+  "primary_policy": "influence",
+  "random_policy": "random",
+  "random_seed": 0,
+  "target_quantiles": [
+    0.1,
+    0.5,
+    0.9
+  ]
+}

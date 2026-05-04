@@ -1,0 +1,19 @@
+dataset_key,dataset_name,target_player,direction,k,trial,exposure_index,model_a,model_b,both_active,influence_decision,rigging_decision,same_decision,influence_rows_added,rigging_rows_added,influence_success_after_step,rigging_success_after_step,influence_rank_after_step,rigging_rank_after_step,initial_rank
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,6,0,1,Andrey Rublev,Alexander Zverev,True,model_a,model_a,True,1,1,False,False,6,6,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,6,0,2,Novak Djokovic,Taylor Fritz,True,model_b,model_b,True,1,1,True,True,7,7,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,6,1,1,Hubert Hurkacz,Holger Rune,True,model_b,model_b,True,1,1,False,False,6,6,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,6,1,2,Stefanos Tsitsipas,Holger Rune,True,model_b,model_b,True,1,1,False,False,6,6,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,6,1,3,Daniil Medvedev,Jannik Sinner,True,model_b,model_b,True,1,1,False,False,6,6,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,6,1,4,Taylor Fritz,Jannik Sinner,True,model_a,model_a,True,1,1,True,True,7,7,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,6,2,1,Alexander Zverev,Taylor Fritz,True,model_b,model_b,True,1,1,True,True,7,7,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,6,3,1,Novak Djokovic,Alexander Zverev,True,model_a,model_a,True,1,1,False,False,6,6,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,6,3,2,Taylor Fritz,Hubert Hurkacz,True,model_a,model_a,True,1,1,False,False,6,6,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,6,3,3,Novak Djokovic,Jannik Sinner,True,model_a,model_a,True,1,1,False,False,6,6,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,6,3,4,Jannik Sinner,Stefanos Tsitsipas,True,model_a,model_a,True,1,1,False,False,6,6,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,6,3,5,Carlos Alcaraz,Stefanos Tsitsipas,True,model_b,model_b,True,1,1,False,False,6,6,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,6,3,6,Daniil Medvedev,Hubert Hurkacz,True,model_b,model_b,True,1,1,True,True,7,7,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,6,4,1,Holger Rune,Hubert Hurkacz,True,model_a,model_a,True,1,1,False,False,6,6,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,6,4,2,Holger Rune,Novak Djokovic,True,model_b,model_b,True,1,1,False,False,6,6,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,6,4,3,Andrey Rublev,Daniil Medvedev,True,model_a,model_a,True,1,1,False,False,6,6,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,6,4,4,Taylor Fritz,Stefanos Tsitsipas,True,model_a,model_a,True,1,1,False,False,6,6,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Alexander Zverev,demote,6,4,5,Taylor Fritz,Hubert Hurkacz,True,model_a,model_a,True,1,1,True,True,7,7,6

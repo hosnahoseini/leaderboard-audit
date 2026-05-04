@@ -1,0 +1,19 @@
+dataset_key,dataset_name,k,direction,target_player,initial_rank
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),3,demote,Novak Djokovic,1
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),3,demote,Carlos Alcaraz,2
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),3,demote,Daniil Medvedev,3
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),6,demote,Jannik Sinner,4
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),6,demote,Holger Rune,5
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),7,demote,Holger Rune,5
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),6,demote,Alexander Zverev,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),7,demote,Alexander Zverev,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),7,demote,Taylor Fritz,7
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),3,promote,Jannik Sinner,4
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),3,promote,Holger Rune,5
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),3,promote,Alexander Zverev,6
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),6,promote,Taylor Fritz,7
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),6,promote,Stefanos Tsitsipas,8
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),7,promote,Stefanos Tsitsipas,8
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),6,promote,Andrey Rublev,9
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),7,promote,Andrey Rublev,9
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),7,promote,Hubert Hurkacz,10

@@ -26,10 +26,12 @@ from clean_bt_rank import (
     plot_ratings,
 )
 from clean_bt_rank.ci_aware_actions_needed import predicted_gap_target_met
+from clean_bt_rank.experiments._common import apply_add_candidate, apply_drop_row, apply_flip_row, make_state
 from clean_bt_rank.iterative_actions import (
     _select_top_alpha_matches,
     apply_action_on_top_alpha_influential_matches,
     compute_all_action_influences,
+    refit_model_with_action,
 )
 
 
@@ -208,6 +210,128 @@ def test_add_candidates_are_paired_and_count_as_one_action() -> None:
 
     assert result["n_applied"] == 1
     assert len(result["selected_matches"]) == 2
+
+
+def test_experiment_state_add_appends_forward_reverse_rows() -> None:
+    df = pd.DataFrame(
+        [
+            {"model_a": "alpha", "model_b": "beta", "winner": "model_a"},
+            {"model_a": "beta", "model_b": "gamma", "winner": "model_a"},
+        ]
+    )
+    dataset = BattleDataset.from_dataframe(df, weighted_symmetric_ties=True)
+    model = BradleyTerryModel.from_dataset(dataset).fit()
+    state = make_state(model)
+
+    chosen = pd.Series(
+        {
+            "model_a": "alpha",
+            "model_b": "gamma",
+            "outcome": 1.0,
+            "_candidate_x": np.array([1.0, -1.0]),
+        }
+    )
+    updated = apply_add_candidate(state, chosen)
+
+    assert updated.X.shape[0] == state.X.shape[0] + 2
+    assert updated.y[-2:].tolist() == [1.0, 0.0]
+    assert updated.frame.iloc[-2:]["match_copy"].tolist() == ["forward", "reverse"]
+    assert updated.frame.iloc[-2:]["match_id"].nunique() == 1
+
+
+def test_experiment_state_drop_removes_full_forward_reverse_pair() -> None:
+    df = pd.DataFrame(
+        [
+            {"model_a": "alpha", "model_b": "beta", "winner": "model_a"},
+            {"model_a": "alpha", "model_b": "gamma", "winner": "model_a"},
+        ]
+    )
+    dataset = BattleDataset.from_dataframe(df, weighted_symmetric_ties=True)
+    model = BradleyTerryModel.from_dataset(dataset).fit()
+    state = make_state(model)
+
+    updated = apply_drop_row(state, int(state.frame.iloc[0]["row_uid"]))
+
+    assert updated.X.shape[0] == state.X.shape[0] - 2
+    assert updated.frame["match_id"].nunique() == state.frame["match_id"].nunique() - 1
+    assert 0 not in updated.frame["match_id"].tolist()
+
+
+def test_experiment_state_flip_flips_full_forward_reverse_pair() -> None:
+    df = pd.DataFrame(
+        [
+            {"model_a": "alpha", "model_b": "beta", "winner": "model_a"},
+            {"model_a": "alpha", "model_b": "gamma", "winner": "model_a"},
+        ]
+    )
+    dataset = BattleDataset.from_dataframe(df, weighted_symmetric_ties=True)
+    model = BradleyTerryModel.from_dataset(dataset).fit()
+    state = make_state(model)
+
+    pair_mask = state.frame["match_id"] == int(state.frame.iloc[0]["match_id"])
+    original_pair_outcomes = state.y[pair_mask.to_numpy()].tolist()
+
+    updated = apply_flip_row(state, int(state.frame.iloc[0]["row_uid"]))
+
+    assert updated.y[pair_mask.to_numpy()].tolist() == [1.0 - value for value in original_pair_outcomes]
+
+
+def test_refit_model_with_action_drop_removes_full_forward_reverse_pair() -> None:
+    df = pd.DataFrame(
+        [
+            {"model_a": "alpha", "model_b": "beta", "winner": "model_a"},
+            {"model_a": "alpha", "model_b": "gamma", "winner": "tie"},
+            {"model_a": "beta", "model_b": "gamma", "winner": "model_a"},
+        ]
+    )
+    dataset = BattleDataset.from_dataframe(df, weighted_symmetric_ties=True)
+    model = BradleyTerryModel.from_dataset(dataset).fit()
+    frame = model.match_frame_.copy()
+    selected = frame.loc[frame["match_id"] == int(frame.iloc[0]["match_id"])].copy()
+
+    updated = refit_model_with_action(model, selected, "drop")
+
+    assert updated.X.shape[0] == model.X.shape[0] - 2
+    assert updated.match_frame_["match_id"].nunique() == model.match_frame_["match_id"].nunique() - 1
+
+
+def test_refit_model_with_action_flip_flips_full_forward_reverse_pair() -> None:
+    df = pd.DataFrame(
+        [
+            {"model_a": "alpha", "model_b": "beta", "winner": "model_a"},
+            {"model_a": "alpha", "model_b": "gamma", "winner": "tie"},
+            {"model_a": "beta", "model_b": "gamma", "winner": "model_a"},
+        ]
+    )
+    dataset = BattleDataset.from_dataframe(df, weighted_symmetric_ties=True)
+    model = BradleyTerryModel.from_dataset(dataset).fit()
+    frame = model.match_frame_.copy()
+    selected = frame.loc[frame["match_id"] == int(frame.iloc[0]["match_id"])].copy()
+    mask = frame["match_id"] == int(selected.iloc[0]["match_id"])
+
+    updated = refit_model_with_action(model, selected, "flip")
+
+    assert updated.y[mask.to_numpy()].tolist() == [1.0 - value for value in model.y[mask.to_numpy()].tolist()]
+
+
+def test_refit_model_with_action_add_appends_forward_reverse_pair_once_for_logical_match() -> None:
+    df = pd.DataFrame(
+        [
+            {"model_a": "alpha", "model_b": "beta", "winner": "model_a"},
+            {"model_a": "alpha", "model_b": "gamma", "winner": "tie"},
+        ]
+    )
+    dataset = BattleDataset.from_dataframe(df, weighted_symmetric_ties=True)
+    model = BradleyTerryModel.from_dataset(dataset).fit()
+    objective = SkillGapObjective("alpha", "beta")
+    report = compute_all_action_influences(model, objective, action="add", candidate_mode="all_outcomes")
+    selected = _select_top_alpha_matches(report, alpha=1, group_by_match=True)
+
+    updated = refit_model_with_action(model, selected, "add")
+
+    assert updated.X.shape[0] == model.X.shape[0] + 2
+    assert updated.match_frame_.iloc[-2:]["match_copy"].tolist() == ["forward", "reverse"]
+    assert updated.match_frame_.iloc[-2:]["match_id"].nunique() == 1
 
 
 def test_predicted_gap_target_met_matches_gap_crossing_direction() -> None:

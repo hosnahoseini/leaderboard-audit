@@ -1,0 +1,11 @@
+dataset_key,dataset_name,objective_key,variant,action,candidate_mode,initial_value,greedy_final_value,random_final_value,greedy_steps_completed,random_steps_completed,initial_normalized_value,greedy_final_normalized_value,random_final_normalized_value
+nba_elo_top50,NBA Elo Top-50 Teams,kendall_tau,drop,drop,,0.4545498887251019,0.4492059419141995,0.45440679467513384,25,25,1.0,0.9882434317036336,0.9996851961610432
+nba_elo_top50,NBA Elo Top-50 Teams,kendall_tau,flip,flip,,0.4545498887251019,0.4385315965310632,0.45433819553309496,25,25,1.0,0.9647601009452099,0.999534279520779
+nba_elo_top50,NBA Elo Top-50 Teams,kendall_tau,add_pairs,add,all_pairs,0.4545498887251019,0.4534889064071793,0.4550205165843389,25,25,1.0,0.9976658616705455,1.0010353711900732
+nba_elo_top50,NBA Elo Top-50 Teams,kendall_tau,add_outcomes,add,all_outcomes,0.4545498887251019,0.44853836381584494,0.45445807330447097,25,25,1.0,0.9867747742142942,0.9997980080450829
+nba_elo_top50,NBA Elo Top-50 Teams,kendall_tau,add_weighted,add,weighted,0.4545498887251019,0.4522198689850655,0.45464600380724185,25,25,1.0,0.9948740065769865,1.000211451117961
+nba_elo_top50,NBA Elo Top-50 Teams,trace_uncertainty,drop,drop,,0.05142185315698416,0.05142083394330638,0.05143005662379312,25,25,,,
+nba_elo_top50,NBA Elo Top-50 Teams,trace_uncertainty,flip,flip,,0.05142185315698416,0.051060621091896116,0.05142150419681628,25,25,,,
+nba_elo_top50,NBA Elo Top-50 Teams,trace_uncertainty,add_pairs,add,all_pairs,0.05142185315698416,0.05121853486721141,0.05138151760601509,25,25,,,
+nba_elo_top50,NBA Elo Top-50 Teams,trace_uncertainty,add_outcomes,add,all_outcomes,0.05142185315698416,0.05103197873577112,0.051365536814099756,25,25,,,
+nba_elo_top50,NBA Elo Top-50 Teams,trace_uncertainty,add_weighted,add,weighted,0.05142185315698416,0.05108868959487042,0.05136946826186279,25,25,,,

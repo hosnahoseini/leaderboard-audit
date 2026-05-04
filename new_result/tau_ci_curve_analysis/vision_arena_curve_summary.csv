@@ -1,0 +1,11 @@
+dataset_key,dataset_name,objective_key,variant,action,candidate_mode,initial_value,greedy_final_value,random_final_value,greedy_steps_completed,random_steps_completed,initial_normalized_value,greedy_final_normalized_value,random_final_normalized_value
+vision_arena,Vision Arena,kendall_tau,drop,drop,,0.6882679774777904,0.681597641350025,0.6884547722902247,25,25,1.0,0.9903085188530645,1.0002713983775895
+vision_arena,Vision Arena,kendall_tau,flip,flip,,0.6882679774777904,0.6767805346581222,0.6875318629780574,25,25,1.0,0.983309636369013,0.9989304827133892
+vision_arena,Vision Arena,kendall_tau,add_pairs,add,all_pairs,0.6882679774777904,0.6878220562184367,0.6895136532927791,25,25,1.0,0.9993521109888218,1.0018098703640892
+vision_arena,Vision Arena,kendall_tau,add_outcomes,add,all_outcomes,0.6882679774777904,0.6811372900610603,0.6883919822820999,25,25,1.0,0.9896396641278283,1.0001801693647927
+vision_arena,Vision Arena,kendall_tau,add_weighted,add,weighted,0.6882679774777904,0.6815468715162817,0.6874508928141385,25,25,1.0,0.9902347542215479,0.9988128393439919
+vision_arena,Vision Arena,trace_uncertainty,drop,drop,,0.01871424701534232,0.018715426589192424,0.018725444936606116,25,25,,,
+vision_arena,Vision Arena,trace_uncertainty,flip,flip,,0.01871424701534232,0.01831679612751025,0.018701704334872973,25,25,,,
+vision_arena,Vision Arena,trace_uncertainty,add_pairs,add,all_pairs,0.01871424701534232,0.01863994738392776,0.01869679167707115,25,25,,,
+vision_arena,Vision Arena,trace_uncertainty,add_outcomes,add,all_outcomes,0.01871424701534232,0.01826487908075426,0.018639718848386163,25,25,,,
+vision_arena,Vision Arena,trace_uncertainty,add_weighted,add,weighted,0.01871424701534232,0.01826883107046473,0.018639528184901076,25,25,,,

@@ -1,0 +1,16 @@
+{
+  "dataset": "arena55k",
+  "dataset_name": "Chatbot Arena 55k",
+  "k_values": [
+    1,
+    3,
+    5,
+    10,
+    20,
+    40
+  ],
+  "max_action_fraction": 0.01,
+  "max_actions": 575,
+  "n_models": 64,
+  "n_original_matches": 57477
+}

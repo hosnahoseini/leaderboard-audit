@@ -30,7 +30,7 @@ from clean_bt_rank import (
     run_objective_curve_steps,
     use_paper_rc,
 )
-from clean_bt_rank.ci_aware_actions_needed import build_named_dataset_model
+from clean_bt_rank.ci_aware_actions_needed import build_named_dataset_model, clear_model_cache, load_named_battle_row_count
 from clean_bt_rank.iterative_actions import compute_all_action_influences
 from clean_bt_rank.objectives import TraceUncertaintyObjective
 
@@ -444,13 +444,10 @@ def run_dataset(
     return curves_df, summary_df, meta
 
 
-def load_dataset_builds(dataset_keys: list[str]) -> list[dict[str, object]]:
-    builds: list[dict[str, object]] = []
-    for dataset_key in dataset_keys:
-        print(f"Loading {dataset_key} ...", flush=True)
-        builds.append(build_named_dataset_model(dataset_key))
-    builds.sort(key=lambda built: (int(built["dataset"].n_matches), str(built["dataset_key"])))
-    return builds
+def resolve_dataset_order(dataset_keys: list[str]) -> list[tuple[str, int]]:
+    size_rows = [(str(dataset_key), load_named_battle_row_count(dataset_key)) for dataset_key in dataset_keys]
+    size_rows.sort(key=lambda item: (item[1], item[0]))
+    return size_rows
 
 
 def main() -> None:
@@ -464,13 +461,19 @@ def main() -> None:
         return
 
     dataset_keys = sorted(available_hf_battle_datasets()) if args.datasets is None else list(args.datasets)
-    dataset_builds = load_dataset_builds(dataset_keys)
+    dataset_order = resolve_dataset_order(dataset_keys)
+
+    print("Resolved dataset order:", flush=True)
+    for idx, (dataset_key, n_rows) in enumerate(dataset_order, start=1):
+        print(f"{idx:>2}. {dataset_key} ({n_rows} battle rows)", flush=True)
 
     all_curve_rows: list[pd.DataFrame] = []
     all_summary_rows: list[pd.DataFrame] = []
     metadata_rows: list[dict[str, object]] = []
 
-    for built in dataset_builds:
+    for dataset_key, _n_rows in dataset_order:
+        print(f"Loading {dataset_key} ...", flush=True)
+        built = build_named_dataset_model(dataset_key)
         print(
             f"Running {built['dataset_key']} ({int(built['dataset'].n_matches)} fitted rows) ...",
             flush=True,
@@ -487,6 +490,7 @@ def main() -> None:
         metadata_rows.append(meta)
         all_curve_rows.append(curves_df)
         all_summary_rows.append(summary_df.assign(**meta))
+        clear_model_cache(dataset_key)
 
     metadata_df = pd.DataFrame(metadata_rows)
     all_curves_df = pd.concat(all_curve_rows, ignore_index=True) if all_curve_rows else pd.DataFrame()

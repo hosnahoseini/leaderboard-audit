@@ -139,6 +139,18 @@ def build_named_dataset_model(dataset_key: str) -> dict[str, object]:
     return built
 
 
+def clear_model_cache(dataset_key: str | None = None) -> None:
+    if dataset_key is None:
+        MODEL_CACHE.clear()
+        return
+    MODEL_CACHE.pop(str(dataset_key), None)
+
+
+def load_named_battle_row_count(dataset_key: str) -> int:
+    loaded = load_named_battle_data(dataset_key)
+    return int(len(loaded.battle_frame))
+
+
 def ci_summary_frame(
     bt_model: BradleyTerryModel,
     *,

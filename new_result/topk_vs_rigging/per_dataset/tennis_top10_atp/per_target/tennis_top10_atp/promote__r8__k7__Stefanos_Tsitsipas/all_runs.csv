@@ -1,0 +1,11 @@
+dataset_key,dataset_name,target_player,direction,k,method,policy,trial,success,actions_used,rows_added,exposures_seen,initial_rank,final_rank,final_metric_value
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Stefanos Tsitsipas,promote,7,influence_pair,pairwise_influence,0,True,15,15,15,8,7,0.02867155292078638
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Stefanos Tsitsipas,promote,7,rigging,omni_bt_diff,0,True,15,15,15,8,7,-0.11219270006536042
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Stefanos Tsitsipas,promote,7,influence_pair,pairwise_influence,1,True,14,14,14,8,7,0.051387655376479824
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Stefanos Tsitsipas,promote,7,rigging,omni_bt_diff,1,True,14,14,14,8,7,-0.06989030475459601
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Stefanos Tsitsipas,promote,7,influence_pair,pairwise_influence,2,True,11,11,11,8,7,0.0044501300860742
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Stefanos Tsitsipas,promote,7,rigging,omni_bt_diff,2,True,11,11,11,8,7,-0.13274051586568447
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Stefanos Tsitsipas,promote,7,influence_pair,pairwise_influence,3,True,26,26,26,8,7,0.03361172823932401
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Stefanos Tsitsipas,promote,7,rigging,omni_bt_diff,3,True,24,24,24,8,7,-0.07326082929622224
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Stefanos Tsitsipas,promote,7,influence_pair,pairwise_influence,4,True,11,11,11,8,7,0.023817400082375206
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Stefanos Tsitsipas,promote,7,rigging,omni_bt_diff,4,True,11,11,11,8,7,-0.04362380698405599

@@ -1,0 +1,9 @@
+dataset_key,dataset_name,k,pair_count,max_actions,variant,action,candidate_mode,player_pair,met,n_actions,initial_value,final_value,variant_label,n_actions_plot,success_label
+arena55k,Chatbot Arena 55k,3,183,575,drop,drop,,"('gpt-4-0314', 'mistral-7b-instruct-v0.2')",True,29,0.5217218058975717,-0.007970843209480938,Drop,29,29
+arena55k,Chatbot Arena 55k,3,183,575,flip,flip,,"('gpt-4-0314', 'mistral-7b-instruct-v0.2')",True,17,0.5217218058975717,-0.03403846546237316,Flip,17,17
+arena55k,Chatbot Arena 55k,3,183,575,add_pairs,add,all_pairs,"('gpt-4-0314', 'qwen1.5-72b-chat')",True,125,0.16800481827116576,-0.0002520173066312137,"Add
+pairs",125,125
+arena55k,Chatbot Arena 55k,3,183,575,add_outcomes,add,all_outcomes,"('gpt-4-0314', 'mistral-7b-instruct-v0.2')",True,34,0.5217218058975717,-0.00924720135461854,"Add
+outcomes",34,34
+arena55k,Chatbot Arena 55k,3,183,575,add_weighted,add,weighted,"('gpt-4-0314', 'mistral-7b-instruct-v0.2')",True,37,0.5217218058975717,-0.002911824756360537,"Add
+weighted",37,37

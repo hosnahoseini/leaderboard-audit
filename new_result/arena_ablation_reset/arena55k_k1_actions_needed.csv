@@ -1,0 +1,9 @@
+dataset_key,dataset_name,k,pair_count,max_actions,variant,action,candidate_mode,player_pair,met,n_actions,initial_value,final_value,variant_label,n_actions_plot,success_label
+arena55k,Chatbot Arena 55k,1,63,575,drop,drop,,"('gpt-4-0125-preview', 'gpt-4-1106-preview')",True,7,-0.012367220659471243,0.00916347460503858,Drop,7,7
+arena55k,Chatbot Arena 55k,1,63,575,flip,flip,,"('gpt-4-0125-preview', 'gpt-4-1106-preview')",True,4,-0.012367220659471243,0.0010204800595278113,Flip,4,4
+arena55k,Chatbot Arena 55k,1,63,575,add_pairs,add,all_pairs,"('gpt-4-0125-preview', 'gpt-4-1106-preview')",True,9,-0.012367220659471243,1.730023644394953e-05,"Add
+pairs",9,9
+arena55k,Chatbot Arena 55k,1,63,575,add_outcomes,add,all_outcomes,"('gpt-4-0125-preview', 'gpt-4-1106-preview')",True,9,-0.012367220659471243,0.001032451948595363,"Add
+outcomes",9,9
+arena55k,Chatbot Arena 55k,1,63,575,add_weighted,add,weighted,"('gpt-4-0125-preview', 'gpt-4-1106-preview')",True,9,-0.012367220659471243,0.001032451948595363,"Add
+weighted",9,9

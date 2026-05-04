@@ -1,0 +1,11 @@
+dataset_key,dataset_name,target_player,direction,k,method,policy,trial,success,actions_used,rows_added,exposures_seen,initial_rank,final_rank,final_metric_value
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Andrey Rublev,promote,6,influence_pair,pairwise_influence,0,True,15,15,15,9,6,0.0035729318910886487
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Andrey Rublev,promote,6,rigging,omni_bt_diff,0,True,16,16,16,9,6,-0.04568390251332377
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Andrey Rublev,promote,6,influence_pair,pairwise_influence,1,True,20,20,20,9,6,0.011410500083289588
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Andrey Rublev,promote,6,rigging,omni_bt_diff,1,True,29,29,29,9,6,-0.030591844641199906
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Andrey Rublev,promote,6,influence_pair,pairwise_influence,2,True,15,15,15,9,6,0.006484351289242074
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Andrey Rublev,promote,6,rigging,omni_bt_diff,2,True,15,15,15,9,6,-0.003260951816706825
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Andrey Rublev,promote,6,influence_pair,pairwise_influence,3,True,20,20,20,9,6,0.011037958506026957
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Andrey Rublev,promote,6,rigging,omni_bt_diff,3,True,22,22,22,9,6,-0.25598320994252277
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Andrey Rublev,promote,6,influence_pair,pairwise_influence,4,True,16,16,16,9,6,0.02881030044133359
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),Andrey Rublev,promote,6,rigging,omni_bt_diff,4,True,20,20,20,9,6,-0.08899134374482487

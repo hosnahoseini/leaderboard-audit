@@ -1,0 +1,2 @@
+top_player,outside_player,top_rank,outside_rank,initial_gap,top_ci_lower,top_ci_upper,outside_ci_lower,outside_ci_upper,initial_overlap
+llama-v3.3-70b-instruct,llama-v3.1-405b-instruct,12,13,0.39639027913729175,493.470098024037,707.6635552793928,493.7299506410853,569.683613934812,True

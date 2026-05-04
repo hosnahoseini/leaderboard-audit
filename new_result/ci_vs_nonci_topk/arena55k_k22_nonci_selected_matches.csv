@@ -1,0 +1,68 @@
+dataset_key,dataset_name,k,method,variant,action,candidate_mode,target_top_player,target_outside_player,selected_order,model_a,model_b,winner,match_id,match_copy,outcome,influence,influence_abs,fitted_probability,residual,leverage,objective_value,row_uid,candidate_probability,_candidate_x,raw_influence
+arena55k,Chatbot Arena 55k,22,nonci,drop,drop,,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,0,vicuna-13b,mistral-7b-instruct-v0.2,1.0,26551,forward,1.0,-0.011973400474181618,0.011973400474181618,0.4170669136060996,0.5829330863939004,0.005187957473482782,0.03218083384313086,26551,,,
+arena55k,Chatbot Arena 55k,22,nonci,drop,drop,,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,1,mistral-7b-instruct-v0.2,vicuna-13b,0.0,26551,reverse,0.0,-0.011973400474181616,0.011973400474181616,0.5829330863939003,-0.5829330863939003,0.005187957473482782,0.03218083384313086,84028,,,
+arena55k,Chatbot Arena 55k,22,nonci,drop,drop,,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,2,mistral-7b-instruct-v0.2,codellama-34b-instruct,0.0,17137,forward,0.0,-0.011503529435676037,0.011503529435676037,0.5609899669009384,-0.5609899669009384,0.005404158486896847,0.03218083384313086,17137,,,
+arena55k,Chatbot Arena 55k,22,nonci,drop,drop,,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,3,codellama-34b-instruct,mistral-7b-instruct-v0.2,1.0,17137,reverse,1.0,-0.011503529435676037,0.011503529435676037,0.43901003309906156,0.5609899669009384,0.005404158486896846,0.03218083384313086,74614,,,
+arena55k,Chatbot Arena 55k,22,nonci,flip,flip,,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,0,openchat-3.5-0106,mistral-7b-instruct-v0.2,1.0,14601,reverse,1.0,-0.020580253128276556,0.020580253128276556,0.4569247938330161,0.5430752061669839,0.0071403013384903555,0.03218083384313086,72078,,,
+arena55k,Chatbot Arena 55k,22,nonci,flip,flip,,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,1,qwen1.5-72b-chat,mistral-7b-instruct-v0.2,1.0,9929,reverse,1.0,-0.020524861555027422,0.020524861555027422,0.5875186475917298,0.4124813524082702,0.00579364921899586,0.03218083384313086,67406,,,
+arena55k,Chatbot Arena 55k,22,nonci,flip,flip,,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,2,qwen1.5-72b-chat,mistral-7b-instruct-v0.2,1.0,4036,forward,1.0,-0.020524861555027422,0.020524861555027422,0.5875186475917298,0.4124813524082702,0.00579364921899586,0.03218083384313086,4036,,,
+arena55k,Chatbot Arena 55k,22,nonci,flip,flip,,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,3,qwen1.5-72b-chat,mistral-7b-instruct-v0.2,1.0,49120,reverse,1.0,-0.020524861555027422,0.020524861555027422,0.5875186475917298,0.4124813524082702,0.00579364921899586,0.03218083384313086,106597,,,
+arena55k,Chatbot Arena 55k,22,nonci,flip,flip,,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,4,mistral-7b-instruct-v0.2,qwen1.5-72b-chat,0.0,49120,forward,0.0,-0.02052486155502742,0.02052486155502742,0.41248135240827016,-0.41248135240827016,0.005793649218995859,0.03218083384313086,49120,,,
+arena55k,Chatbot Arena 55k,22,nonci,flip,flip,,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,5,mistral-7b-instruct-v0.2,openchat-3.5-0106,1.0,14601,forward,1.0,0.020554949223830103,0.020554949223830103,0.5430752061669839,0.4569247938330161,0.0071403013384903555,0.03218083384313086,14601,,,
+arena55k,Chatbot Arena 55k,22,nonci,flip,flip,,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,6,mistral-7b-instruct-v0.2,qwen1.5-72b-chat,1.0,4036,reverse,1.0,0.020566532530427912,0.020566532530427912,0.41248135240827016,0.5875186475917298,0.005793649218995859,0.03218083384313086,61513,,,
+arena55k,Chatbot Arena 55k,22,nonci,flip,flip,,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,7,mistral-7b-instruct-v0.2,qwen1.5-72b-chat,1.0,9929,forward,1.0,0.020566532530427912,0.020566532530427912,0.41248135240827016,0.5875186475917298,0.005793649218995859,0.03218083384313086,9929,,,
+arena55k,Chatbot Arena 55k,22,nonci,add_pairs,add,all_pairs,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,0,mistral-7b-instruct-v0.2,tulu-2-dpo-70b,,59446,forward,1.0,-0.010014016380467191,0.010014016380467191,,,,,3938,1.0,"[ 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0. -1.  0.
+  0.  0.  0.  0.  0.  0.  0.  1.  0.]",-0.010014016380467191
+arena55k,Chatbot Arena 55k,22,nonci,add_pairs,add,all_pairs,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,1,tulu-2-dpo-70b,mistral-7b-instruct-v0.2,,59446,reverse,0.0,-0.01001401638046719,0.01001401638046719,,,,,3939,1.0,"[ 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  1.  0.
+  0.  0.  0.  0.  0.  0.  0. -1.  0.]",-0.01001401638046719
+arena55k,Chatbot Arena 55k,22,nonci,add_pairs,add,all_pairs,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,2,pplx-70b-online,mistral-7b-instruct-v0.2,,58113,reverse,0.0,-0.009738902386817273,0.009738902386817273,,,,,1273,1.0,"[ 0.  0.  0.  0.  0.  0.  0.  0.  0.  1.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0. -1.  0.]",-0.009738902386817273
+arena55k,Chatbot Arena 55k,22,nonci,add_pairs,add,all_pairs,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,3,mistral-7b-instruct-v0.2,pplx-70b-online,,58113,forward,1.0,-0.009738902386817272,0.009738902386817272,,,,,1272,1.0,"[ 0.  0.  0.  0.  0.  0.  0.  0.  0. -1.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  1.  0.]",-0.009738902386817272
+arena55k,Chatbot Arena 55k,22,nonci,add_outcomes,add,all_outcomes,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,0,mistral-7b-instruct-v0.2,gpt-4-1106-preview,,57600,forward,1.0,-0.014631304123584783,0.014631304123584783,,,,,246,0.2818442345012523,"[0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+ 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 1. 0.]",-0.014631304123584783
+arena55k,Chatbot Arena 55k,22,nonci,add_outcomes,add,all_outcomes,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,1,gpt-4-1106-preview,mistral-7b-instruct-v0.2,,57600,reverse,0.0,-0.014631304123584783,0.014631304123584783,,,,,247,0.2818442345012523,"[ 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0. -1.  0.]",-0.014631304123584783
+arena55k,Chatbot Arena 55k,22,nonci,add_outcomes,add,all_outcomes,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,2,mistral-7b-instruct-v0.2,gpt-4-0125-preview,,59866,forward,1.0,-0.014589037903492424,0.014589037903492424,,,,,4778,0.28435419951251545,"[ 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0. -1.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  1.  0.]",-0.014589037903492424
+arena55k,Chatbot Arena 55k,22,nonci,add_outcomes,add,all_outcomes,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,3,gpt-4-0125-preview,mistral-7b-instruct-v0.2,,59866,reverse,0.0,-0.014589037903492424,0.014589037903492424,,,,,4779,0.28435419951251545,"[ 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  1.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0. -1.  0.]",-0.014589037903492424
+arena55k,Chatbot Arena 55k,22,nonci,add_weighted,add,weighted,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,0,mistral-7b-instruct-v0.2,nous-hermes-2-mixtral-8x7b-dpo,,61324,forward,1.0,-0.006654217650765223,0.006654217650765223,,,,,7694,0.4919554857728797,"[ 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0. -1.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  1.  0.]",-0.013526056407951645
+arena55k,Chatbot Arena 55k,22,nonci,add_weighted,add,weighted,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,1,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,,61324,reverse,0.0,-0.006654217650765221,0.006654217650765221,,,,,7695,0.4919554857728797,"[ 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  1.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0. -1.  0.]",-0.01352605640795164
+arena55k,Chatbot Arena 55k,22,nonci,add_weighted,add,weighted,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,2,mistral-7b-instruct-v0.2,gpt-3.5-turbo-0125,,61126,forward,1.0,-0.0050828805875594305,0.0050828805875594305,,,,,7298,0.4795501080058148,"[ 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0. -1.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  1.  0.]",-0.010599268987126988
+arena55k,Chatbot Arena 55k,22,nonci,add_weighted,add,weighted,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,3,gpt-3.5-turbo-0125,mistral-7b-instruct-v0.2,,61126,reverse,0.0,-0.00508288058755943,0.00508288058755943,,,,,7299,0.4795501080058148,"[ 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  1.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0. -1.  0.]",-0.010599268987126986
+arena55k,Chatbot Arena 55k,22,nonci,add_weighted,add,weighted,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,4,mistral-7b-instruct-v0.2,vicuna-33b,,60246,forward,1.0,-0.00507984902064805,0.00507984902064805,,,,,5538,0.4919548649056439,"[ 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0. -1.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  1.  0.]",-0.010325843655641776
+arena55k,Chatbot Arena 55k,22,nonci,add_weighted,add,weighted,nous-hermes-2-mixtral-8x7b-dpo,mistral-7b-instruct-v0.2,5,vicuna-33b,mistral-7b-instruct-v0.2,,60246,reverse,0.0,-0.00507984902064805,0.00507984902064805,,,,,5539,0.4919548649056439,"[ 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  1.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
+  0.  0.  0.  0.  0.  0.  0. -1.  0.]",-0.010325843655641776

@@ -1,0 +1,21 @@
+Repo card metadata block was not found. Setting CardData to empty.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Using the latest cached version of the dataset since lmarena-ai/VisionArena-Battle couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /tmp/clean_bt_rank_hf_cache/lmarena-ai___vision_arena-battle/default/0.0.0/a41d58f15caa3e2d9685774153d2bc815b943d96 (last modified on Fri Apr 24 12:35:43 2026).
+Resolved dataset order:
+ 1. tennis_top10_atp (278 battle rows)
+ 2. mt_bench_human (3355 battle rows)
+ 3. webdev_arena (10501 battle rows)
+ 4. vision_arena (29849 battle rows)
+ 5. llm_judge_arena (49938 battle rows)
+ 6. arena55k (57477 battle rows)
+ 7. nba_elo_top50 (109892 battle rows)
+Checkpointed outputs after dataset 1/7: tennis_top10_atp
+Traceback (most recent call last):
+  File "/u501/hoyarhos/clean_bt_rank/scripts/run_topk_vs_rigging_comparison.py", line 1808, in <module>
+    raise SystemExit(main())
+  File "/u501/hoyarhos/clean_bt_rank/scripts/run_topk_vs_rigging_comparison.py", line 1674, in main
+    selected_ks = choose_stratified_random_ks(
+  File "/u501/hoyarhos/clean_bt_rank/scripts/run_topk_vs_rigging_comparison.py", line 271, in choose_stratified_random_ks
+    raise ValueError(f"Need at least three valid k regions, found only {len(regions)}.")
+ValueError: Need at least three valid k regions, found only 1.

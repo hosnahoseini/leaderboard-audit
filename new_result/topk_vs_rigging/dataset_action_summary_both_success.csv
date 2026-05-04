@@ -1,0 +1,9 @@
+dataset_key,dataset_name,direction,method,n_runs,n_success_runs,success_rate,mean_exposures_seen,median_exposures_seen,mean_actions_used,median_actions_used,mean_rows_added,median_rows_added,influence_trial_wins,rigging_trial_wins,tied_trials,n_joint_success_trials
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),demote,influence_pair,43,43,1.0,25.046511627906977,21.0,25.046511627906977,21.0,25.046511627906977,21.0,33,10,0,43
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),demote,rigging,43,43,1.0,26.186046511627907,18.0,26.186046511627907,18.0,26.186046511627907,18.0,33,10,0,43
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),promote,influence_pair,45,45,1.0,20.08888888888889,18.0,20.08888888888889,18.0,20.08888888888889,18.0,40,5,0,45
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),promote,rigging,45,45,1.0,21.88888888888889,20.0,21.88888888888889,20.0,21.88888888888889,20.0,40,5,0,45
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),all,influence_pair,88,88,1.0,22.511363636363637,18.0,22.511363636363637,18.0,22.511363636363637,18.0,73,15,0,88
+tennis_top10_atp,ATP Top-10 Matchups (2020-2024),all,rigging,88,88,1.0,23.988636363636363,18.0,23.988636363636363,18.0,23.988636363636363,18.0,73,15,0,88
+all_datasets,All datasets,all,influence_pair,88,88,1.0,22.511363636363637,18.0,22.511363636363637,18.0,22.511363636363637,18.0,73,15,0,88
+all_datasets,All datasets,all,rigging,88,88,1.0,23.988636363636363,18.0,23.988636363636363,18.0,23.988636363636363,18.0,73,15,0,88

@@ -29,10 +29,12 @@ from clean_bt_rank.ci_aware_actions_needed import (
     VARIANTS,
     build_ci_overlap_pairs,
     build_named_dataset_model,
+    clear_model_cache,
     choose_meaningful_k,
     ci_membership_target_met,
     compute_max_actions,
     export_gao_ci_ranking,
+    load_named_battle_row_count,
     pair_ci_status,
     predicted_gap_target_met,
     remaining_matches_long_frame,
@@ -71,8 +73,7 @@ def resolve_dataset_order(dataset_keys: list[str], order_mode: str) -> tuple[lis
 
     size_rows: list[tuple[str, int]] = []
     for key in keys:
-        built = build_named_dataset_model(key)
-        size_rows.append((key, int(len(built["raw"]))))
+        size_rows.append((key, load_named_battle_row_count(key)))
 
     reverse = order_mode == "size_desc"
     size_rows.sort(key=lambda item: (item[1], item[0]), reverse=reverse)
@@ -1183,6 +1184,8 @@ def main() -> None:
             )
             comparison_df["action_count_delta_nonci_minus_ci"] = comparison_df["n_actions_nonci"] - comparison_df["n_actions_ci"]
             comparison_rows.extend(comparison_df.to_dict(orient="records"))
+
+        clear_model_cache(dataset_key)
 
     pd.DataFrame(k_rows).to_csv(output_dir / "all_datasets_k_selection.csv", index=False)
     ci_filename = "all_datasets_strict_ci_actions_needed.csv" if args.ci_objective == "strict" else "all_datasets_ci_aware_actions_needed.csv"

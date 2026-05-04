@@ -1,0 +1,30 @@
+\begin{table*}[t]
+\centering
+\caption{%
+  Minimum influence-guided actions at the CI boundary rank $k$, reported as
+  {point-estimate / CI-aware} (percentages relative to total matches).
+  On the large Arena-style datasets, point-estimate boundary breaks still occur
+  with only 1--4 actions, but the CI-aware criterion usually requires tens of
+  actions.
+  {robust}: target not changed within budget.
+}
+\setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l r r r r r r r}
+\toprule
+\textbf{Dataset} & \textbf{Total} & \textbf{$k$} & \textbf{Drop} & \textbf{Flip} & \textbf{Add-pairs} & \textbf{Add-outcomes} & \textbf{Add-weighted} \\
+\midrule
+Arena 55k       & 57{,}477 & 22 & 2 (0.00\%) / 29 (0.05\%) & 4 (0.01\%) / 21 (0.04\%) & 2 (0.00\%) / 39 (0.07\%) & 2 (0.00\%) / 26 (0.05\%) & 3 (0.01\%) / 28 (0.05\%) \\
+Arena LLM-J     & 49{,}938 & 31 & 1 (0.00\%) / 68 (0.14\%) & 1 (0.00\%) / 28 (0.06\%) & 1 (0.00\%) / 50 (0.10\%) & 1 (0.00\%) / 32 (0.06\%) & 1 (0.00\%) / 45 (0.09\%) \\
+MT-Bench        & 3{,}355  & 2  & 19 (0.57\%) / 126 (3.76\%) & 8 (0.24\%) / 60 (1.79\%) & robust / robust & robust / robust & robust / robust \\
+% NBA Top-50 omitted here because new_result/ci_vs_nonci_topk does not contain
+% the corresponding new-code *_actions_needed.csv summaries for this dataset.
+ATP Top-10      & 278      & 8  & 1 (0.36\%) / 13 (4.68\%) & 1 (0.36\%) / 7 (2.52\%) & 1 (0.36\%) / robust & 1 (0.36\%) / robust & 1 (0.36\%) / robust \\
+Vision Arena    & 29{,}849 & 14 & 5 (0.02\%) / 77 (0.26\%) & 5 (0.02\%) / 121 (0.41\%) & 6 (0.02\%) / robust & 5 (0.02\%) / robust & 10 (0.03\%) / robust \\
+WebDev Arena    & 10{,}501 & 12 & 4 (0.04\%) / 170 (1.62\%) & 2 (0.02\%) / 36 (0.34\%) & 7 (0.07\%) / robust & 6 (0.06\%) / robust & 10 (0.10\%) / robust \\
+\bottomrule
+\end{tabular}%
+}% end resizebox
+
+\label{tab:ci_vs_nonci_actions}
+\end{table*}
