@@ -10,6 +10,24 @@
 - running iterative manipulation / robustness procedures,
 - and running experiment pipelines on Arena-style data.
 
+## GitHub Pages Website
+
+The static website artifact lives in `docs/index.html`. This repository includes
+`.github/workflows/pages.yml`, which publishes `docs/` to GitHub Pages whenever
+you push to `master` or `main`.
+
+To publish it on your GitHub account:
+
+```bash
+git remote add origin git@github.com:<your-user>/<your-repo>.git
+git add README.md .gitignore .github/workflows/pages.yml docs/
+git commit -m "Prepare clean GitHub Pages site"
+git push -u origin master
+```
+
+Then open the repository on GitHub, go to **Settings -> Pages**, and set the
+source to **GitHub Actions**.
+
 This README explains the codebase as it is actually implemented: what each file
 does, what algorithm is used there, and how the main pieces fit together.
 
