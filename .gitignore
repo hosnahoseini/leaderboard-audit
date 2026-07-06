@@ -1,6 +1,12 @@
 notebooks
 scripts/extra
 
+# Local editor and OS metadata
+.codex
+.DS_Store
+*.ds
+*.DS
+
 # Python caches and local test artifacts
 __pycache__/
 *.py[cod]
@@ -29,6 +35,7 @@ tests/artifacts/
 *.key
 *.pptx
 *.mp4
+synthetic_demo.png
 pdfs/
 FINAL/
 slide_clips/
