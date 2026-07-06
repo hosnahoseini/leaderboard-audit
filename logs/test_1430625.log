@@ -1,4 +1,0 @@
-mkdir: cannot create directory ‘’: No such file or directory
-Traceback (most recent call last):
-  File "<stdin>", line 2, in <module>
-NameError: name 'imports' is not defined

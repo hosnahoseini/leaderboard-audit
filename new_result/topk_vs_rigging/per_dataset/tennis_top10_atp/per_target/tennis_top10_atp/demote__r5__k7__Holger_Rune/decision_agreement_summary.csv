@@ -1,2 +1,0 @@
-dataset_key,dataset_name,direction,target_player,initial_rank,k,n_exposed_pairs_total,n_jointly_predicted_pairs,same_decision_rate_when_both_active,n_same_decision_when_both_active,n_different_decision_when_both_active
-tennis_top10_atp,ATP Top-10 Matchups (2020-2024),demote,Holger Rune,5,7,102,79,0.7215189873417721,57,22

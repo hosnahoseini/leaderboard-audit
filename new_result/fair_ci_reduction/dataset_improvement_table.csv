@@ -1,9 +1,0 @@
-dataset_key,dataset_name,baseline_policy,primary_policy,mean_improvement_pct,median_improvement_pct,n_targets
-arena55k,Chatbot Arena 55k,arena_active,influence,0.07906195056421757,0.05754985436485658,3
-llm_judge_arena,Chatbot Arena LLM Judges,arena_active,influence,0.08444910952562545,0.03245817793392427,3
-mt_bench_human,MT-Bench Human Judgments,arena_active,influence,-0.02353127549724138,-0.022937030524527995,3
-nba_elo_top50,NBA Elo Top-50 Teams,arena_active,influence,0.021689815501711073,0.017937493389889304,3
-tennis_top10_atp,ATP Top-10 Matchups (2020-2024),arena_active,influence,0.09925353228933269,0.28229310277593567,3
-vision_arena,Vision Arena,arena_active,influence,0.0008444724710013106,0.004351442429187019,3
-webdev_arena,WebDev Arena,arena_active,influence,-0.9014451974119376,-0.04288871154429197,3
-all,All datasets,arena_active,influence,-0.09138251322247012,0.017919933581751455,19

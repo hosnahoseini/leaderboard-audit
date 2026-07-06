@@ -1,14 +1,0 @@
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-Generating train split:   0%|          | 0/57477 [00:00<?, ? examples/s]Generating train split:  17%|█▋        | 10000/57477 [00:00<00:01, 34948.51 examples/s]Generating train split:  35%|███▍      | 20000/57477 [00:00<00:00, 38868.23 examples/s]Generating train split:  52%|█████▏    | 30000/57477 [00:00<00:00, 42692.00 examples/s]Generating train split:  70%|██████▉   | 40000/57477 [00:00<00:00, 45829.12 examples/s]Generating train split:  87%|████████▋ | 50000/57477 [00:01<00:00, 47189.94 examples/s]Generating train split: 100%|██████████| 57477/57477 [00:01<00:00, 44828.20 examples/s]Generating train split: 100%|██████████| 57477/57477 [00:01<00:00, 43708.92 examples/s]
-Repo card metadata block was not found. Setting CardData to empty.
-Using the latest cached version of the dataset since lmarena-ai/VisionArena-Battle couldn't be found on the Hugging Face Hub
-Found the latest cached dataset configuration 'default' at /tmp/clean_bt_rank_hf_cache/lmarena-ai___vision_arena-battle/default/0.0.0/a41d58f15caa3e2d9685774153d2bc815b943d96 (last modified on Fri Apr 24 12:35:43 2026).
-Saved task table to /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/topk_vs_rigging_all_datasets_3tasks_5trials/tasks.csv
-Saved run-level results to /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/topk_vs_rigging_all_datasets_3tasks_5trials/all_runs.csv
-Saved summary table to /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/topk_vs_rigging_all_datasets_3tasks_5trials/summary.csv
-Saved decision log to /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/topk_vs_rigging_all_datasets_3tasks_5trials/decision_log.csv
-Saved trial summary to /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/topk_vs_rigging_all_datasets_3tasks_5trials/trial_summary.csv
-Saved decision agreement summary to /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/topk_vs_rigging_all_datasets_3tasks_5trials/decision_agreement_summary.csv
-Saved dataset action summary to /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/topk_vs_rigging_all_datasets_3tasks_5trials/dataset_action_summary.csv
-Saved run config to /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/topk_vs_rigging_all_datasets_3tasks_5trials/run_config.csv
-Saved plots to /u501/hoyarhos/clean_bt_rank/notebooks/artifacts/topk_vs_rigging_all_datasets_3tasks_5trials

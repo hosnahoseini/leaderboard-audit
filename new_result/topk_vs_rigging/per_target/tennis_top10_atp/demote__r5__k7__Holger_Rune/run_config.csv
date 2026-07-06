@@ -1,2 +1,0 @@
-datasets,tasks_per_dataset,n_targets_per_direction,trials,budget,rigging_mode,beta,seed_base,k_mode,fixed_k
-tennis_top10_atp mt_bench_human webdev_arena vision_arena llm_judge_arena arena55k nba_elo_top50,0,3,5,120,omni_bt_diff,1.0,0,stratified_random_three_regions,

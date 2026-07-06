@@ -1,4 +1,0 @@
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-Generating train split:   0%|          | 0/57477 [00:00<?, ? examples/s]Generating train split:  17%|█▋        | 10000/57477 [00:00<00:01, 30416.19 examples/s]Generating train split:  35%|███▍      | 20000/57477 [00:00<00:01, 32778.41 examples/s]Generating train split:  52%|█████▏    | 30000/57477 [00:00<00:00, 35582.32 examples/s]Generating train split:  70%|██████▉   | 40000/57477 [00:01<00:00, 37473.48 examples/s]Generating train split:  87%|████████▋ | 50000/57477 [00:01<00:00, 36721.67 examples/s]Generating train split: 100%|██████████| 57477/57477 [00:01<00:00, 36899.02 examples/s]Generating train split: 100%|██████████| 57477/57477 [00:01<00:00, 35943.72 examples/s]
-Repo card metadata block was not found. Setting CardData to empty.
-slurmstepd: error: *** JOB 1432166 ON watgpu208 CANCELLED AT 2026-04-27T18:02:38 ***

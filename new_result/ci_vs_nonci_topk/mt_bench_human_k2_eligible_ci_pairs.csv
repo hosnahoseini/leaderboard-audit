@@ -1,2 +1,0 @@
-top_player,outside_player,top_rank,outside_rank,initial_gap,top_ci_lower,top_ci_upper,outside_ci_lower,outside_ci_upper,initial_overlap
-claude-v1,gpt-3.5-turbo,2,3,0.04305190595499697,1226.6885527473817,1261.373748015853,1222.3938109401204,1250.710725669776,True

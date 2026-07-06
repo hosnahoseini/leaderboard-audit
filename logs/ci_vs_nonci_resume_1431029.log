@@ -1,8 +1,0 @@
-/var/spool/slurm/d/job1431029/slurm_script: 4: source: not found
-Repo card metadata block was not found. Setting CardData to empty.
-Resolved dataset order:
- 1. llm_judge_arena (49938 battle rows)
- 2. arena55k (57477 battle rows)
- 3. nba_elo_top50 (109892 battle rows)
-Running llm_judge_arena ...
-slurmstepd: error: *** JOB 1431029 ON watgpu408 CANCELLED AT 2026-04-24T21:12:49 ***

@@ -1,5 +1,0 @@
-outputs: line 19: warning: here-document at line 1 delimited by end-of-file (wanted `PY')
-  File "<stdin>", line 5
-    output_dir = Path(/u501/hoyarhos/clean_bt_rank/notebooks/artifacts/top1_robustness_action_needed_arena_drop_legacy_20260424)
-                      ^
-SyntaxError: invalid syntax

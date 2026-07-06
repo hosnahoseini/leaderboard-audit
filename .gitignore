@@ -16,10 +16,12 @@ venv/
 env/
 
 # Generated experiment outputs and logs
+jobs/
 logs/
 new_result/
 new_action_handling_result/
 final_result/
+tests/
 tests/artifacts/
 
 # Large local exports and presentation scratch files

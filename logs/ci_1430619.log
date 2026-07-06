@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "/u501/hoyarhos/clean_bt_rank/scripts/run_ci_aware_robustness_actions_needed.py", line 12, in <module>
-    from clean_bt_rank import available_hf_battle_datasets
-  File "/u501/hoyarhos/clean_bt_rank/src/clean_bt_rank/__init__.py", line 13, in <module>
-    from .bt_model import BradleyTerryModel
-  File "/u501/hoyarhos/clean_bt_rank/src/clean_bt_rank/bt_model.py", line 7, in <module>
-    from sklearn.linear_model import LogisticRegression
-ModuleNotFoundError: No module named 'sklearn'

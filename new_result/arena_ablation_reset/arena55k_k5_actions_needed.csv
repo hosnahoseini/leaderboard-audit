@@ -1,9 +1,0 @@
-dataset_key,dataset_name,k,pair_count,max_actions,variant,action,candidate_mode,player_pair,met,n_actions,initial_value,final_value,variant_label,n_actions_plot,success_label
-arena55k,Chatbot Arena 55k,5,295,575,drop,drop,,"('qwen1.5-72b-chat', 'mistral-medium')",True,5,0.02483976795599563,-0.00068977349467092,Drop,5,5
-arena55k,Chatbot Arena 55k,5,295,575,flip,flip,,"('qwen1.5-72b-chat', 'mistral-medium')",True,5,0.02483976795599563,-0.001998310332639419,Flip,5,5
-arena55k,Chatbot Arena 55k,5,295,575,add_pairs,add,all_pairs,"('qwen1.5-72b-chat', 'mistral-medium')",True,25,0.02483976795599563,-0.00037936955702677633,"Add
-pairs",25,25
-arena55k,Chatbot Arena 55k,5,295,575,add_outcomes,add,all_outcomes,"('qwen1.5-72b-chat', 'mistral-medium')",True,4,0.02483976795599563,-0.0015770281993586766,"Add
-outcomes",4,4
-arena55k,Chatbot Arena 55k,5,295,575,add_weighted,add,weighted,"('qwen1.5-72b-chat', 'mistral-medium')",True,7,0.02483976795599563,-0.002822993544078778,"Add
-weighted",7,7

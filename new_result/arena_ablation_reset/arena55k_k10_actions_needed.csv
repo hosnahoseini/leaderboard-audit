@@ -1,9 +1,0 @@
-dataset_key,dataset_name,k,pair_count,max_actions,variant,action,candidate_mode,player_pair,met,n_actions,initial_value,final_value,variant_label,n_actions_plot,success_label
-arena55k,Chatbot Arena 55k,10,540,575,drop,drop,,"('gemini-pro', 'yi-34b-chat')",True,3,0.005389130241910012,-0.0005938906985420989,Drop,3,3
-arena55k,Chatbot Arena 55k,10,540,575,flip,flip,,"('gemini-pro', 'mixtral-8x7b-instruct-v0.1')",True,1,0.00027952759712313036,-0.00362711890639722,Flip,1,1
-arena55k,Chatbot Arena 55k,10,540,575,add_pairs,add,all_pairs,"('gemini-pro', 'mixtral-8x7b-instruct-v0.1')",True,1,0.00027952759712313036,-0.0011332665861339963,"Add
-pairs",1,1
-arena55k,Chatbot Arena 55k,10,540,575,add_outcomes,add,all_outcomes,"('gemini-pro', 'mixtral-8x7b-instruct-v0.1')",True,1,0.00027952759712313036,-0.0021388626628623397,"Add
-outcomes",1,1
-arena55k,Chatbot Arena 55k,10,540,575,add_weighted,add,weighted,"('gemini-pro', 'mixtral-8x7b-instruct-v0.1')",True,1,0.00027952759712313036,-0.0016707993465568949,"Add
-weighted",1,1

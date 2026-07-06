@@ -1,12 +1,0 @@
-Loading arena55k ...
-Loading llm_judge_arena ...
-Repo card metadata block was not found. Setting CardData to empty.
-Generating train split:   0%|          | 0/49938 [00:00<?, ? examples/s]Generating train split: 100%|██████████| 49938/49938 [00:00<00:00, 69100.82 examples/s]Generating train split: 100%|██████████| 49938/49938 [00:00<00:00, 68768.45 examples/s]
-Loading mt_bench_human ...
-Generating gpt4_pair split:   0%|          | 0/2400 [00:00<?, ? examples/s]Generating gpt4_pair split: 100%|██████████| 2400/2400 [00:00<00:00, 49668.08 examples/s]
-Generating human split:   0%|          | 0/3355 [00:00<?, ? examples/s]Generating human split: 100%|██████████| 3355/3355 [00:00<00:00, 144899.24 examples/s]
-Loading nba_elo_top50 ...
-Loading tennis_top10_atp ...
-Loading vision_arena ...
-Killed
-slurmstepd: error: Detected 1 oom_kill event in StepId=1433222.batch. Some of the step tasks have been OOM Killed.

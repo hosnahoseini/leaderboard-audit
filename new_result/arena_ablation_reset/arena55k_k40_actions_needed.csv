@@ -1,9 +1,0 @@
-dataset_key,dataset_name,k,pair_count,max_actions,variant,action,candidate_mode,player_pair,met,n_actions,initial_value,final_value,variant_label,n_actions_plot,success_label
-arena55k,Chatbot Arena 55k,40,960,575,drop,drop,,"('mpt-30b-chat', 'pplx-7b-online')",True,5,0.019742211133537024,-0.0016416403773769073,Drop,5,5
-arena55k,Chatbot Arena 55k,40,960,575,flip,flip,,"('mpt-30b-chat', 'guanaco-33b')",True,2,0.02098925245659422,-0.005294188450384096,Flip,2,2
-arena55k,Chatbot Arena 55k,40,960,575,add_pairs,add,all_pairs,"('qwen1.5-7b-chat', 'pplx-7b-online')",True,5,0.04119192079958611,-0.008631810031193954,"Add
-pairs",5,5
-arena55k,Chatbot Arena 55k,40,960,575,add_outcomes,add,all_outcomes,"('qwen1.5-7b-chat', 'pplx-7b-online')",True,3,0.04119192079958611,-0.008016941031445457,"Add
-outcomes",3,3
-arena55k,Chatbot Arena 55k,40,960,575,add_weighted,add,weighted,"('qwen1.5-7b-chat', 'pplx-7b-online')",True,4,0.04119192079958611,-0.00033109450894719394,"Add
-weighted",4,4

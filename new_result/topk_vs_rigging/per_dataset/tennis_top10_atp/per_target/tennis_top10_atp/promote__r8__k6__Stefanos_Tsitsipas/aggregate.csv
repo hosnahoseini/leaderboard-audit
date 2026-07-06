@@ -1,2 +1,0 @@
-n_tasks,n_trials_per_task,budget,influence_mean_success_rate,rigging_mean_success_rate,mean_median_exposure_advantage,mean_prob_rigging_exposures_ge_influence,mean_same_decision_rate_when_both_active,influence_successful_trials,rigging_successful_trials,both_successful_trials,influence_trial_wins,rigging_trial_wins,tied_trials
-1,5,120,1.0,1.0,0.0,0.8,0.7913043478260869,5,5,5,4,1,0
