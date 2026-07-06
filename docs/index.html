@@ -334,3 +334,220 @@ inited.overview=true;
 window.addEventListener("resize",function(){var a=VIEWS.find(function(v){return document.getElementById("v-"+v.id).classList.contains("active");}); if(a&&RESIZE[a.id])RESIZE[a.id]();});
 })();
 </script>
+
+<style>
+  /* --- Exact-algorithm panel (thesis appendix pseudocode) --- */
+  .algo-panel{margin-top:18px;background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:0 18px 6px;}
+  .algo-panel>summary{list-style:none;cursor:pointer;padding:16px 0;font-family:var(--mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;gap:8px;align-items:center;}
+  .algo-panel>summary::-webkit-details-marker{display:none;}
+  .algo-panel>summary .tw{color:var(--blue);}
+  .algo-panel>summary .chev{transition:.2s;color:var(--dim);font-size:.9rem;}
+  .algo-panel[open]>summary .chev{transform:rotate(90deg);}
+  .algo-note{color:var(--muted);font-size:.86rem;margin:2px 0 14px;padding-left:1px;}
+  .algo{border:1px solid var(--line);border-radius:12px;background:#ffffff05;padding:15px 16px;margin-bottom:14px;overflow-x:auto;}
+  .algo:last-child{margin-bottom:8px;}
+  .algo-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:11px;}
+  .algo-t{font-weight:640;font-size:1.0rem;color:var(--text);}
+  .algo-ref{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--coral);border:1px solid var(--coral-soft);background:var(--coral-soft);border-radius:6px;padding:3px 8px;white-space:nowrap;}
+  .algo-io{display:grid;grid-template-columns:64px 1fr;gap:10px;font-size:.86rem;margin:5px 0;align-items:start;}
+  .algo-io .io-k{font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);padding-top:3px;}
+  .algo-io .io-v{color:var(--muted);line-height:1.5;}
+  .algo-steps{list-style:none;counter-reset:ln;margin:12px 0 2px;padding:0;font-family:var(--mono);font-size:.82rem;line-height:1.55;}
+  .algo-steps li{counter-increment:ln;display:grid;grid-template-columns:26px 1fr;gap:10px;padding:1.5px 0;color:var(--text);}
+  .algo-steps li::before{content:counter(ln);color:var(--dim);text-align:right;font-size:.72rem;padding-top:1px;font-variant-numeric:tabular-nums;}
+  .algo-steps li.i1 .lx{padding-left:20px;} .algo-steps li.i2 .lx{padding-left:40px;} .algo-steps li.i3 .lx{padding-left:60px;}
+  .algo-steps li.kw .lx{color:var(--blue);}
+  .algo-steps li.ret .lx{color:var(--green);}
+  .algo-steps .kwb{color:var(--blue);font-weight:600;}
+  .algo-steps .mth{color:var(--gold);}
+  .algo-steps .cmt{color:var(--dim);}
+  .algo-steps .pre{display:block;white-space:pre;color:var(--muted);padding:4px 0 2px;}
+</style>
+<script>
+(function(){
+  "use strict";
+  var $=function(s,r){return (r||document).querySelector(s);};
+  // ---- helpers to keep the pseudocode terse ----
+  // line: [indentClass, html]  · use k()/r() wrappers for keyword / return colouring
+  function L(t){return [0,t];} function I1(t){return [1,t];} function I2(t){return [2,t];}
+  function K0(t){return [0,t,"kw"];} function K1(t){return [1,t,"kw"];} function K2(t){return [2,t,"kw"];}
+  function R(t){return [0,t,"ret"];}
+  var M=function(t){return '<span class="mth">'+t+'</span>';};   // math
+  var KW=function(t){return '<span class="kwb">'+t+'</span>';};  // inline keyword
+  var th="θ̂", z="z<sub>α</sub>", SE="SE", Phi="Φ⁻¹(1−α<sub>CI</sub>/2)";
+
+  var A={
+  topk:{t:"Top-k Robustness Action Search",ref:"Appendix · Algorithm 1",
+    in:"Fitted BT model "+M("M̂")+" on dataset "+M("D")+"; ordered set of top-k cross-boundary candidate pairs "+M("𝒫")+"; fixed action variant "+M("a ∈ {drop, flip, add_pairs, add_outcomes, add_weighted}")+"; maximum action count "+M("A")+".",
+    out:"Smallest action count that makes at least one candidate top-k boundary gap cross zero, with the corresponding pair and selected actions.",
+    steps:[
+      L("Fit the Bradley–Terry model on "+M("D")+" and obtain "+M(th)+"."),
+      L("Construct the ordered set "+M("𝒫")+" of top-k cross-boundary candidate pairs."),
+      L("Initialize an empty cache of per-pair influence reports."),
+      K0(KW("for")+" "+M("α = 1 … A")+" "+KW("do")),
+      K1(KW("for all")+" "+M("(i,j) ∈ 𝒫")+" "+KW("do")),
+      I2("Define the gap objective "+M("f<sub>ij</sub>(θ̂) = θ̂<sub>i</sub> − θ̂<sub>j</sub>")+"."),
+      I2("If not cached, compute the one-step influence report for "+M("(i,j)")+" under variant "+M("a")+" over its candidate pool."),
+      I2("Let "+M("g<sub>ij</sub> = f<sub>ij</sub>(θ̂)")+"."),
+      I2("Select the top "+M("α")+" candidate actions: if "+M("g<sub>ij</sub> &gt; 0")+" take the most negative influences, else the most positive."),
+      I2("Treat grouped forward/reverse copies as one logical action."),
+      I2("Apply the "+M("α")+" actions to "+M("D")+", refit BT, and compute the updated gap "+M("g<sub>ij</sub><sup>(α)</sup>")+" (or estimate it via influence)."),
+      K2(KW("if")+" "+M("(g<sub>ij</sub>&gt;0 ∧ g<sub>ij</sub><sup>(α)</sup> ≤ 0)")+" or "+M("(g<sub>ij</sub>&lt;0 ∧ g<sub>ij</sub><sup>(α)</sup> ≥ 0)")+" "+KW("then")),
+      [3,'<span class="ret" style="color:var(--green)">'+KW("return")+" "+M("α")+", the pair "+M("(i,j)")+", and the selected actions.</span>"],
+      K2(KW("end if")),K1(KW("end for")),K0(KW("end for")),
+      R(KW("return")+" failure if no pair succeeds within "+M("A")+" actions.")
+    ]},
+
+  strict:{t:"Strict CI-Aware Top-k Manipulation",ref:"Appendix · Algorithm 2",
+    in:"Fitted BT model on "+M("D")+"; target boundary rank "+M("k")+"; fixed insider–outsider pair "+M("(i,j)")+" ("+M("i")+"=rank-k, "+M("j")+"=rank-(k+1)); CI method; CI level "+M("α<sub>CI</sub>")+"; action variant "+M("a")+"; budget "+M("A")+".",
+    out:"Minimum number of actions to certify that outsider "+M("j")+" lies above insider "+M("i")+" under strict CI separation.",
+    steps:[
+      L("Fit BT on "+M("D")+"; compute "+M(th)+" and CIs "+M("[θ̂<sub>m</sub> − "+z+"·SE<sub>m</sub>, θ̂<sub>m</sub> + "+z+"·SE<sub>m</sub>]")+", "+M(z+" = "+Phi)+"."),
+      L("Fix the target pair "+M("(i,j)")+" before the search ("+M("i")+" insider, "+M("j")+" outsider)."),
+      L("Define the strict CI objective "+M("g<sub>ij</sub>(θ̂) = (θ̂<sub>i</sub> + "+z+"·SE<sub>i</sub>) − (θ̂<sub>j</sub> − "+z+"·SE<sub>j</sub>)")+"."),
+      L("Proceed only if initially unmet: "+M("g<sub>ij</sub>(θ̂) ≥ 0")+"."),
+      L("Compute the full one-step influence report for variant "+M("a")+" w.r.t. "+M("g<sub>ij</sub>")+" over its pool."),
+      K0(KW("for")+" "+M("ℓ = 1 … A")+" "+KW("do")),
+      I1("Select the top "+M("ℓ")+" logical actions that most decrease "+M("g<sub>ij</sub>")+"."),
+      I1("Rank candidates ascending by influence; group forward/reverse copies as one action."),
+      I1("Form the first-order screened objective "+M("g̃<sub>ij</sub><sup>(ℓ)</sup> = g<sub>ij</sub>(θ̂) + Σ<sub>n∈S</sub> ℐ<sub>n</sub>")+"."),
+      K1(KW("if")+" "+M("g̃<sub>ij</sub><sup>(ℓ)</sup> ≥ 0")+" "+KW("then")+' <span class="cmt">continue to next budget without refitting.</span> '+KW("end if")),
+      I1("Apply the selected actions to "+M("D")+" and refit BT."),
+      I1("Recompute the exact strict objective "+M("g<sub>ij</sub><sup>refit</sup> = (θ̂<sub>i</sub><sup>refit</sup> + "+z+"·SE<sub>i</sub><sup>refit</sup>) − (θ̂<sub>j</sub><sup>refit</sup> − "+z+"·SE<sub>j</sub><sup>refit</sup>)")+"."),
+      K1(KW("if")+" "+M("g<sub>ij</sub><sup>refit</sup> &lt; 0")+' <span class="cmt">(i.e. '+M("L<sub>j</sub><sup>refit</sup> &gt; U<sub>i</sub><sup>refit</sup>")+')</span> '+KW("then")),
+      [2,'<span class="ret" style="color:var(--green)">'+KW("return")+" "+M("ℓ")+", the pair, the actions, and the refit ranking.</span>"],
+      K1(KW("end if")),K0(KW("end for")),
+      R(KW("return")+" failure if no strict CI-certified reversal within "+M("A")+".")
+    ]},
+
+  ksel:{t:"Strict CI-Aware k-Selection",ref:"Appendix · Algorithm 3",
+    in:"Fitted BT model on "+M("D")+"; CI method; CI level "+M("α<sub>CI</sub>")+".",
+    out:"One valid target triple "+M("(k,i,j)")+" — insider "+M("i")+" at rank "+M("k")+", outsider "+M("j")+" at rank "+M("k+1")+".",
+    steps:[
+      L("Fit BT on "+M("D")+"; compute the CI ranking."),
+      K0(KW("for")+" "+M("k = 1 … N−1")+" "+KW("do")),
+      I1(M("i")+" = rank-k model, "+M("j")+" = rank-(k+1) model."),
+      I1("Define "+M("g<sub>ij</sub>(θ̂) = (θ̂<sub>i</sub> + "+z+"·SE<sub>i</sub>) − (θ̂<sub>j</sub> − "+z+"·SE<sub>j</sub>)")+", "+M(z+" = "+Phi)+"."),
+      I1("Keep boundary "+M("(k,i,j)")+" only if "+M("g<sub>ij</sub>(θ̂) ≥ 0")+"."),
+      K0(KW("end for")),
+      R(KW("return")+" the valid boundary "+M("(k,i,j)")+" with the smallest strict objective "+M("g<sub>ij</sub>(θ̂)")+"."),
+      R(KW("return")+" failure if none satisfies "+M("g<sub>ij</sub>(θ̂) ≥ 0")+".")
+    ]},
+
+  rigging:{t:"Online Rigging Baseline (Omni-On)",ref:"Appendix · Algorithm 4",
+    in:"Initial Elo/BT ranking on "+M("D")+"; target model "+M("m*")+"; direction "+M("d ∈ {promote, demote}")+"; exposed pair stream "+M("{(a<sub>t</sub>,b<sub>t</sub>)}")+"; budget "+M("B")+"; Elo constants "+M("K, BASE, SCALE")+".",
+    out:"Ordered decisions and target-rank trajectory.",
+    steps:[
+      L("Compute initial ratings "+M("θ̂<sub>m</sub>")+"; record the initial rank of "+M("m*")+"."),
+      K0(KW("for")+" "+M("t = 1 … B")+" "+KW("do")),
+      I1("Observe the exposed pair "+M("(a<sub>t</sub>,b<sub>t</sub>)")+"."),
+      I1("Candidate set "+M("𝒜<sub>t</sub> = {a_wins, b_wins, tie, remove}")+"."),
+      I1("Let "+M("r<sub>a</sub>=θ̂<sub>a</sub>, r<sub>b</sub>=θ̂<sub>b</sub>, r<sub>*</sub>=θ̂<sub>m*</sub>")+"; "+M("e<sub>a</sub>=1/(1+BASE<sup>(r<sub>b</sub>−r<sub>a</sub>)/SCALE</sup>)")+", "+M("e<sub>b</sub>=1/(1+BASE<sup>(r<sub>a</sub>−r<sub>b</sub>)/SCALE</sup>)")+"."),
+      K1(KW("for all")+" "+M("α ∈ 𝒜<sub>t</sub>")+" "+KW("do")),
+      I2("Form one-step hypothetical ratings:"),
+      [2,'<span class="pre">  a_wins : r′<sub>a</sub>=r<sub>a</sub>+K·e<sub>b</sub>,   r′<sub>b</sub>=r<sub>b</sub>−K·e<sub>b</sub>\n  b_wins : r′<sub>a</sub>=r<sub>a</sub>−K·e<sub>a</sub>,   r′<sub>b</sub>=r<sub>b</sub>+K·e<sub>a</sub>\n  tie    : r′<sub>a</sub>=r<sub>a</sub>−(K/2)(e<sub>a</sub>−e<sub>b</sub>), r′<sub>b</sub>=r<sub>b</sub>+(K/2)(e<sub>a</sub>−e<sub>b</sub>)\n  remove : r′<sub>a</sub>=r<sub>a</sub>,        r′<sub>b</sub>=r<sub>b</sub></span>'],
+      I2("Score "+M("r<sub>t</sub><sup>(α)</sup> = 1/(1+BASE<sup>(r′<sub>a</sub>−r<sub>*</sub>)/SCALE</sup>) + 1/(1+BASE<sup>(r′<sub>b</sub>−r<sub>*</sub>)/SCALE</sup>)")+"."),
+      I2("For demotion tasks, use the inverted reward "+M("−r<sub>t</sub><sup>(α)</sup>")+"."),
+      K1(KW("end for")),
+      I1("Select the greedy rigging decision "+M("α<sub>t</sub><sup>*</sup> = argmax<sub>α</sub> r<sub>t</sub><sup>(α)</sup>")+"."),
+      I1("Apply "+M("α<sub>t</sub><sup>*</sup>")+"; refit the global Elo/BT ranking; append the new rank of "+M("m*")+"."),
+      K0(KW("end for")),
+      R(KW("return")+" the decision history and target-rank trajectory.")
+    ]},
+
+  online:{t:"Online Influence-Guided Targeted Top-k Manipulation",ref:"Appendix · Algorithm 5",
+    in:"Fitted BT model on "+M("D")+"; target model "+M("m*")+"; rank cutoff "+M("k")+"; direction "+M("d ∈ {promote, demote}")+"; exposed pair stream "+M("{(a<sub>t</sub>,b<sub>t</sub>)}")+"; budget "+M("B")+".",
+    out:"Selected decision sequence and final ranking.",
+    steps:[
+      L("Fit the initial BT model on "+M("D")+"; record the initial ranking of "+M("m*")+"."),
+      K0(KW("for")+" "+M("t = 1 … B")+" "+KW("do")),
+      K1(KW("if")+" "+M("rank(m*) ≤ k")+' <span class="cmt">(promote)</span> or '+M("rank(m*) &gt; k")+' <span class="cmt">(demote)</span> '+KW("then")+' <span class="cmt">stop; target met.</span> '+KW("end if")),
+      I1("Observe the exposed pair "+M("(a<sub>t</sub>,b<sub>t</sub>)")+"."),
+      I1("Boundary objective "+M("f<sub>t</sub>(θ̂) = θ̂<sub>m*</sub> − θ̂<sub>m<sub>k</sub></sub>")+' <span class="cmt">(promote)</span> or '+M("θ̂<sub>m<sub>k+1</sub></sub> − θ̂<sub>m*</sub>")+' <span class="cmt">(demote)</span>; '+M("m<sub>k</sub>, m<sub>k+1</sub>")+" recomputed each accepted step."),
+      I1("Decision set "+M("𝒜<sub>t</sub> = {remove, a_wins, b_wins, tie}")+"."),
+      K1(KW("for all")+" "+M("α ∈ 𝒜<sub>t</sub>")+" "+KW("do")),
+      I2("Influence "+M("ℐ<sup>(f<sub>t</sub>)</sup>(α)")+": "+M("0")+' <span class="cmt">(remove)</span>, '+M("ℐ(a≻b)")+' <span class="cmt">(a_wins)</span>, '+M("ℐ(b≻a)")+' <span class="cmt">(b_wins)</span>, '+M("ℐ(a≻b)+ℐ(b≻a)")+' <span class="cmt">(tie)</span>.'),
+      K1(KW("end for")),
+      I1("Select the greedy influence decision "+M("α<sub>t</sub><sup>*</sup> = argmax<sub>α</sub> ℐ<sup>(f<sub>t</sub>)</sup>(α)")+"."),
+      I1("Apply "+M("α<sub>t</sub><sup>*</sup>")+"; refit BT if a row is added (or estimate via influence); update the rank of "+M("m*")+"."),
+      K0(KW("end for")),
+      R(KW("return")+" decisions, success indicator, rank trajectory, and final ranking.")
+    ]},
+
+  ci:{t:"CI Reduction via Targeted Match Addition",ref:"Appendix · Algorithm 6",
+    in:"Fitted dataset "+M("D")+"; target model "+M("m*")+"; budget "+M("B")+"; candidate mode "+M("v")+"; CI method.",
+    out:"Added matches and CI-width trajectory.",
+    steps:[
+      L("Fit BT on "+M("D")+"."),
+      L("Define the target uncertainty objective "+M("f<sub>CI-player</sub>(m*;w) = ρ̂<sub>m*</sub><sup>−2</sup>(w)")+"."),
+      L("Generate add candidates according to "+M("v")+"."),
+      K0(KW("if")+" "+M("v = all_pairs")+" "+KW("then")+' <span class="cmt">use one unordered pair, higher-rated model as winner.</span> '+KW("end if")),
+      L("Compute influence scores for all add candidates once, using the initial fitted model."),
+      L("Sort candidates ascending by influence "+'<span class="cmt">(negative influence reduces '+M("f<sub>CI-player</sub>")+').</span>'),
+      K0(KW("for")+" "+M("t = 1 … B")+" "+KW("do")),
+      I1("Select the next unused candidate from the fixed sorted list."),
+      I1("Add the match to "+M("D")+"; refit BT (or estimate via influence); recompute the target CI width."),
+      K0(KW("end for")),
+      R(KW("return")+" added matches, uncertainty trajectory, and CI-width trajectory.")
+    ]}
+  };
+
+  // objective (+ criterion) -> list of algorithm keys + a short context note
+  function pick(o,method){
+    switch(o){
+      case "top1":   return {n:"Breaking Top-1 is the "+M("k=1")+" case of the top-k robustness search: fix the #1/#2 gap objective and find the fewest greedy actions that flip its sign.",a:["topk"]};
+      case "tau":    return {n:"Degrading Kendall τ reuses the same greedy influence search — only the objective changes from the boundary gap to global τ.",a:["topk"]};
+      case "inout":  return {n:"Promote-in / demote-out over a live exposed-pair stream. Influence picks the outcome that most moves the boundary objective; the rigging baseline greedily maximises the Elo one-step reward instead.",a:["online","rigging"]};
+      case "topkci": return method==="nonci"
+                       ? {n:"Point criterion: cross the boundary on the point estimate — the top-k robustness action search on the gap "+M("θ̂<sub>i</sub> − θ̂<sub>j</sub>")+".",a:["topk"]}
+                       : {n:"CI-aware criterion: certify strict CI separation ("+M("L<sub>j</sub> &gt; U<sub>i</sub>")+"). The target boundary is chosen by the k-selection rule, then manipulated to strict separation.",a:["ksel","strict"]};
+      case "cwhole": return {n:"Whole-list CI: same targeted-addition engine driven by the global CI-width / uncertainty objective across the board.",a:["ci"]};
+      case "cplayer":return {n:"Per-player CI: add the matches whose influence most shrinks one target model's variance proxy "+M("ρ̂<sub>m*</sub><sup>−2</sup>")+".",a:["ci"]};
+      default:       return {n:"",a:["topk"]};
+    }
+  }
+
+  function algoHTML(k){
+    var a=A[k]; if(!a) return "";
+    var s=a.steps.map(function(ln){
+      var cls="i"+ln[0]; if(ln[2]) cls+=" "+ln[2];
+      return '<li class="'+cls+'"><span class="lx">'+ln[1]+'</span></li>';
+    }).join("");
+    return '<div class="algo"><div class="algo-head"><span class="algo-t">'+a.t+'</span><span class="algo-ref">'+a.ref+'</span></div>'+
+      '<div class="algo-io"><span class="io-k">Input</span><span class="io-v">'+a.in+'</span></div>'+
+      '<div class="algo-io"><span class="io-k">Output</span><span class="io-v">'+a.out+'</span></div>'+
+      '<ol class="algo-steps">'+s+'</ol></div>';
+  }
+
+  function curObj(){var b=$("#sbObj button.on");return b?b.dataset.o:"top1";}
+  function curMethod(){var b=$("#sbMethod button.on");return b?b.dataset.m:"ci_aware";}
+
+  var box, noteEl, bodyEl, lastKey="";
+  function render(){
+    if(!box) return;
+    var o=curObj(), m=curMethod(), key=o+"|"+(o==="topkci"?m:"");
+    if(key===lastKey) return; lastKey=key;
+    var p=pick(o,m);
+    noteEl.innerHTML=p.n;
+    bodyEl.innerHTML=p.a.map(algoHTML).join("");
+  }
+
+  function mount(){
+    var host=document.getElementById("v-sandbox"); if(!host) return false;
+    var anchor=document.getElementById("sbCallout"); if(!anchor) return false;
+    box=document.createElement("details"); box.className="algo-panel"; box.open=true;
+    box.innerHTML='<summary><span><span class="tw">Selection algorithm</span> — exact pseudocode · thesis appendix</span><span class="chev">▸</span></summary>'+
+                  '<div class="algo-note" id="algoNote"></div><div id="algoBody"></div>';
+    anchor.parentNode.insertBefore(box, anchor.nextSibling);
+    noteEl=box.querySelector("#algoNote"); bodyEl=box.querySelector("#algoBody");
+    render();
+    // re-render whenever the objective/criterion segment toggles its .on class
+    var bar=document.querySelector(".sandbox-bar");
+    if(bar){ new MutationObserver(render).observe(bar,{subtree:true,attributes:true,attributeFilter:["class"]}); }
+    return true;
+  }
+
+  function boot(){ if(!mount()){ var n=0,iv=setInterval(function(){ if(mount()||++n>40) clearInterval(iv); },80); } }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",boot); else boot();
+})();
+</script>
