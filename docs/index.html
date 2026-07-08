@@ -40,8 +40,12 @@
   .stepnum{font-family:var(--mono);font-size:1.6rem;line-height:1;font-weight:680;color:var(--blue);font-variant-numeric:tabular-nums;transition:color .3s;} .stepnum.done{color:var(--coral);}
   .steplab{color:var(--muted);font-size:.86rem;} .steplab b{color:var(--text);}
   .imatch{border:1px solid #2c6e8f3a;background:var(--blue-soft);border-radius:10px;padding:12px 14px;font-size:.86rem;} .imatch .k{font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:6px;} .imatch .m{font-family:var(--mono);font-size:.82rem;color:var(--text);} .imatch .m .w{color:var(--coral);} .imatch .inf{color:var(--muted);font-size:.74rem;margin-top:4px;font-family:var(--mono);} .imatch .base{margin-top:9px;padding-top:8px;border-top:1px dashed #12233b1e;font-family:var(--mono);font-size:.76rem;color:#414b5b;} .imatch .base .bk{display:block;font-size:.58rem;letter-spacing:.11em;text-transform:uppercase;color:#5b6577;margin-bottom:3px;} .imatch .base .bw{color:#445064;} .imatch .base .bcount{display:inline-block;margin:2px 0 6px;padding:4px 10px;border-radius:7px;background:var(--coral-soft);border:1px solid #d1603d55;color:var(--coral-deep);font-size:.74rem;font-weight:600;} .imatch .base .bcount b{color:var(--coral);font-size:.9rem;font-variant-numeric:tabular-nums;} .imatch .base .bdec{color:var(--muted);} .imatch.empty{border-color:var(--line);background:#12233b10;color:var(--dim);}
-  .cands{display:flex;flex-direction:column;gap:4px;}
-  .crow{display:grid;grid-template-columns:15px 1fr auto;align-items:center;gap:9px;padding:5px 7px;border-radius:8px;border:1px solid transparent;transition:background .3s,border-color .3s,box-shadow .3s;}
+  .cands{display:flex;flex-direction:column;gap:2px;max-height:318px;overflow-y:auto;padding-right:6px;scrollbar-width:thin;scrollbar-color:#c4cdd8 transparent;}
+  .cands::-webkit-scrollbar{width:7px;}
+  .cands::-webkit-scrollbar-thumb{background:#c4cdd8;border-radius:4px;}
+  .cands::-webkit-scrollbar-track{background:transparent;}
+  .crow{display:grid;grid-template-columns:15px 1fr auto;align-items:center;gap:8px;padding:2px 7px;border-radius:7px;border:1px solid transparent;transition:background .3s,border-color .3s,box-shadow .3s;}
+  .crow .ccopy{display:inline-block;margin-left:6px;padding:0 5px;border-radius:5px;background:#d1603d1f;color:var(--coral-deep);font-family:var(--mono);font-size:.58rem;font-weight:600;letter-spacing:.02em;white-space:nowrap;}
   .crow .ci{font-family:var(--mono);font-size:.66rem;color:var(--dim);text-align:right;font-variant-numeric:tabular-nums;}
   .crow .cmain{min-width:0;}
   .crow .cpair{font-family:var(--mono);font-size:.735rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -342,23 +346,34 @@ INIT.sandbox=function(){
     var perstep=!!C.perstep,list;
     if(perstep){var idx=Math.min(step,C.steps.length-1); list=C.steps[idx]||[]; if(list.length===0)list=C.steps[Math.min(1,C.steps.length-1)]||[];}
     else list=C.list||[];
-    var N=r.steps.length-1,tally={};
-    if(!perstep){for(var i=1;i<=Math.min(step,N);i++){var sc=r.steps[i]&&r.steps[i].sel; if(sc){var kk=canonMatch(sc); tally[kk]=(tally[kk]||0)+1;}}}
+    var N=r.steps.length-1,tally={},pickSteps={};
+    if(!perstep){for(var i=1;i<=Math.min(step,N);i++){var sc=r.steps[i]&&r.steps[i].sel; if(sc){var kk=canonMatch(sc); tally[kk]=(tally[kk]||0)+1; (pickSteps[kk]=pickSteps[kk]||[]).push(i);}}}
     var curSel=(step>0&&r.steps[Math.min(step,N)])?r.steps[Math.min(step,N)].sel:null;
     var curKey=curSel?canonMatch(curSel):null;
     var maxabs=0; list.forEach(function(c){var a=Math.abs(c.inf); if(a>maxabs)maxabs=a;}); if(maxabs<=0)maxabs=1;
     var host=el("sbCands"); host.innerHTML="";
-    list.forEach(function(c,i){
+    function addCand(o){
       var row=document.createElement("div"); row.className="crow";
-      var ck=canonMatch(c),pc=tally[ck]||0,isCur=(curKey&&ck===curKey&&step>0);
-      if(i===0)row.classList.add("top");
-      if(pc>0||(perstep&&isCur))row.classList.add("picked");
-      if(isCur)row.classList.add("now");
-      var w=(c.win===1?shortn(c.a):c.win===0?shortn(c.b):"tie");
-      var bw=(Math.abs(c.inf)/maxabs*100).toFixed(1);
-      var badge=pc>0?('<span class="cbadge">×'+pc+'</span>'):'';
-      row.innerHTML='<div class="ci">'+(i+1)+'</div><div class="cmain"><div class="cpair">'+shortn(c.a)+'  vs  '+shortn(c.b)+' <span class="cw">▸ '+w+'</span>'+badge+'</div><div class="cbar"><span style="width:'+bw+'%"></span></div></div><div class="cval">'+fmtInf(c.inf)+'</div>';
+      if(o.top)row.classList.add("top");
+      if(o.picked)row.classList.add("picked");
+      if(o.now)row.classList.add("now");
+      var bw=(Math.abs(o.inf)/maxabs*100).toFixed(1);
+      var tag=o.copyTag?('<span class="ccopy">'+o.copyTag+'</span>'):'';
+      row.innerHTML='<div class="ci">'+o.rank+'</div><div class="cmain"><div class="cpair">'+o.pair+' <span class="cw">▸ '+o.w+'</span>'+tag+'</div><div class="cbar"><span style="width:'+bw+'%"></span></div></div><div class="cval">'+fmtInf(o.inf)+'</div>';
       host.appendChild(row);
+    }
+    list.forEach(function(c,i){
+      var ck=canonMatch(c),isCur=(curKey&&ck===curKey&&step>0);
+      var w=(c.win===1?shortn(c.a):c.win===0?shortn(c.b):"tie");
+      var pair=shortn(c.a)+'  vs  '+shortn(c.b);
+      var steps=perstep?[]:(pickSteps[ck]||[]);
+      if(steps.length>1){
+        // this match was applied multiple times — show each copy on its own row
+        steps.forEach(function(s,j){addCand({rank:(j===0?(i+1):"·"),pair:pair,w:w,inf:c.inf,top:(i===0&&j===0),picked:true,now:(s===step),copyTag:"copy "+(j+1)+"/"+steps.length+" · step "+s});});
+      } else {
+        var pc=steps.length;
+        addCand({rank:(i+1),pair:pair,w:w,inf:c.inf,top:i===0,picked:pc>0||(perstep&&isCur),now:isCur});
+      }
     });
     var picked=0; for(var t in tally)picked+=tally[t];
     var meta=el("sbCandsMeta");
