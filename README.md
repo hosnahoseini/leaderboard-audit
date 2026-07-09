@@ -1,6 +1,7 @@
 # Leaderboard Audit
 
 [![Tests](https://github.com/hosnahoseini/leaderboard-audit/actions/workflows/ci.yml/badge.svg)](https://github.com/hosnahoseini/leaderboard-audit/actions/workflows/ci.yml)
+[![Website](https://img.shields.io/badge/website-companion%20site-2c6e8f.svg)](https://hosnahoseini.github.io/leaderboard-audit/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 
@@ -9,9 +10,14 @@ pairwise preference data, estimates the **influence** of individual matches on t
 resulting ranking, and measures how many data edits — dropping, flipping, or
 adding matches — are needed to change a ranking outcome.
 
-It contains the code behind the thesis *A Unified Perturbation Framework for
-Analyzing Leaderboard Stability and Manipulation* (Hosna Oyarhoseini, MMath,
-University of Waterloo, 2026), including scripts to regenerate the published figures.
+It contains the code behind *A Unified Perturbation Framework for Leaderboard
+Stability and Manipulation* — Hosna Oyarhoseini, Jimmy Lin, Amir-Hossein Karimi —
+presented as an **oral at the CTB Workshop @ ICML 2026** — together with the
+scripts that regenerate the published figures.
+
+**[Explore the interactive companion site →](https://hosnahoseini.github.io/leaderboard-audit/)**
+It walks through the perturbation framework chapter by chapter, with a live
+sandbox for dropping, flipping, and adding matches on a real leaderboard.
 
 ## Features
 
@@ -161,7 +167,7 @@ scripts/               experiment and figure entrypoints
 figure_data/           small CSVs backing the published figures
 tests/                 regression and workflow tests
 IsRankingRobust/       vendored ICML 2025 baseline (MIT, see below)
-docs/                  static companion site published via GitHub Pages
+docs/                  companion site, published at hosnahoseini.github.io/leaderboard-audit
 ```
 
 ## Baseline
