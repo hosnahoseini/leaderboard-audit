@@ -243,15 +243,16 @@ def _prepare_writable_hf_cache(dataset_name: str) -> str:
     source_dataset_dir = home_root / "datasets" / dataset_dir_name
     target_dataset_dir = datasets_root / dataset_dir_name
     if source_dataset_dir.exists() and not target_dataset_dir.exists():
-        shutil.copytree(source_dataset_dir, target_dataset_dir)
+        shutil.copytree(source_dataset_dir, target_dataset_dir, dirs_exist_ok=True)
 
     source_hub_dir = home_root / "hub" / hub_dir_name
     target_hub_dir = hub_root / hub_dir_name
     if source_hub_dir.exists() and not target_hub_dir.exists():
-        shutil.copytree(source_hub_dir, target_hub_dir)
+        shutil.copytree(source_hub_dir, target_hub_dir, dirs_exist_ok=True)
 
-    if target_dataset_dir.exists() and target_hub_dir.exists():
+    if target_dataset_dir.exists() or target_hub_dir.exists():
         os.environ.setdefault("HF_HUB_OFFLINE", "1")
+        os.environ.setdefault("HF_DATASETS_OFFLINE", "1")
 
     return str(cache_root)
 
@@ -407,7 +408,8 @@ class BattleDataset:
         frame["match_id"] = np.arange(len(frame))
         frame["winner"] = frame["winner"].map(lambda value: _map_outcome(value, outcome_map))
         if not weighted_symmetric_ties:
-            mapped = frame["winner"].to_numpy(dtype=float)
+            # pandas>=3 hands back a read-only view here, so ask for a copy explicitly.
+            mapped = frame["winner"].to_numpy(dtype=float, copy=True)
             mapped[mapped == 0.5] = 1.0
             frame["winner"] = mapped
         frame = _build_weighted_symmetric_frame(frame)

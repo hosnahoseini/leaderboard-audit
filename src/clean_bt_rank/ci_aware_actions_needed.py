@@ -22,7 +22,6 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from datasets import DownloadConfig, load_dataset
 
 from clean_bt_rank import (
     ACTION_LABEL_MAP,
@@ -65,6 +64,8 @@ def compute_max_actions(n_rows: int, fraction: float) -> int:
 def load_arena55k_raw_dataframe() -> pd.DataFrame:
     df = _load_cached_hf_frame("lmarena-ai/arena-human-preference-55k", "train")
     if df is None:
+        from datasets import DownloadConfig, load_dataset
+
         ds = load_dataset(
             "lmarena-ai/arena-human-preference-55k",
             split="train",

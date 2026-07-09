@@ -27,10 +27,16 @@ from clean_bt_rank import (
     available_hf_battle_datasets,
     plot_variant_order_curves,
     ranking_from_model,
-    run_objective_curve_steps,
     use_paper_rc,
 )
 from clean_bt_rank.ci_aware_actions_needed import build_named_dataset_model, clear_model_cache, load_named_battle_row_count
+from clean_bt_rank.experiments._common import (
+    apply_add_candidate,
+    apply_drop_row,
+    apply_flip_row,
+    fit_model_from_state,
+    make_state,
+)
 from clean_bt_rank.iterative_actions import compute_all_action_influences
 from clean_bt_rank.objectives import TraceUncertaintyObjective
 
@@ -48,7 +54,7 @@ use_paper_rc()
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Plot Kendall-tau and trace-uncertainty proxy curves versus number of actions."
+        description="Plot Kendall-tau and trace-uncertainty proxy curves versus number of actions using recomputed influences after each applied action."
     )
     parser.add_argument(
         "--datasets",
@@ -59,7 +65,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=ROOT / "notebooks" / "artifacts" / "tau_ci_curve_analysis",
+        default=ROOT / "final_result" / "tau_ci_curve_analysis_recompute",
         help="Directory for CSV/PDF/PNG outputs.",
     )
     parser.add_argument(
@@ -86,28 +92,6 @@ def parse_args() -> argparse.Namespace:
         help="Rebuild figures from existing *_curve_history.csv files in --output-dir without recomputing curves.",
     )
     return parser.parse_args()
-
-
-def make_selection_report(report: pd.DataFrame, *, ascending: bool, random_seed: int | None = None) -> pd.DataFrame:
-    work = report.copy()
-    if random_seed is None:
-        signed = work["influence"].astype(float)
-        work["influence"] = -signed if ascending else signed
-    else:
-        rng = np.random.default_rng(random_seed)
-        work["influence"] = rng.random(len(work))
-    return work
-
-
-def run_order_curve(bt_model, objective, action: str, selection_report: pd.DataFrame, *, steps: int) -> pd.DataFrame:
-    return run_objective_curve_steps(
-        bt_model,
-        objective,
-        action,
-        selection_report,
-        steps=steps,
-        recompute_mode="refit",
-    )
 
 
 def savefig_both(fig: plt.Figure, path_stem: Path) -> None:
@@ -308,7 +292,7 @@ def replot_from_history(output_dir: Path) -> None:
             tau_curve_map = build_curve_map_from_history(tau_df)
             plot_curve_panel(
                 tau_curve_map,
-                title=f"{dataset_name}: Kendall tau vs actions",
+                title=f"{dataset_name}: Kendall tau vs actions (recomputed influences)",
                 ylabel="Normalized Kendall-tau surrogate",
                 path_stem=output_dir / f"{dataset_key}_kendall_tau_curves",
                 objective_key="kendall_tau",
@@ -320,11 +304,89 @@ def replot_from_history(output_dir: Path) -> None:
             trace_curve_map = build_curve_map_from_history(trace_df)
             plot_curve_panel(
                 trace_curve_map,
-                title=f"{dataset_name}: trace uncertainty proxy vs actions",
+                title=f"{dataset_name}: trace uncertainty proxy vs actions (recomputed influences)",
                 ylabel="Trace uncertainty proxy",
                 path_stem=output_dir / f"{dataset_key}_trace_uncertainty_curves",
                 objective_key="trace_uncertainty",
             )
+
+
+def _choose_candidate(report: pd.DataFrame, *, order_mode: str, rng: np.random.Generator) -> pd.Series | None:
+    if report.empty:
+        return None
+    if order_mode == "random":
+        idx = int(rng.integers(len(report)))
+        return report.iloc[idx]
+    return report.sort_values("influence", ascending=False, kind="stable").iloc[0]
+
+
+def _dedupe_action_report(report: pd.DataFrame, action: str) -> pd.DataFrame:
+    if report.empty:
+        return report.copy()
+    if action in {"drop", "flip"} and {"match_id", "match_copy"}.issubset(report.columns):
+        return report.sort_values(["match_id", "match_copy"]).drop_duplicates("match_id", keep="first").reset_index(drop=True)
+    if action == "add" and {"match_id", "match_copy"}.issubset(report.columns):
+        return report.sort_values(["match_id", "match_copy"]).drop_duplicates("match_id", keep="first").reset_index(drop=True)
+    return report.reset_index(drop=True)
+
+
+def _apply_single_action(state, action: str, chosen: pd.Series):
+    if action in {"drop", "flip"} and "match_id" in state.frame.columns and "match_id" in chosen.index:
+        match_rows = state.frame.loc[state.frame["match_id"].astype(int) == int(chosen["match_id"])]
+        if match_rows.empty:
+            raise ValueError(f"Could not find match_id={int(chosen['match_id'])} in current state.")
+        row_uid = int(match_rows["row_uid"].iloc[0])
+    else:
+        row_uid = int(chosen["row_uid"])
+    if action == "drop":
+        return apply_drop_row(state, row_uid)
+    if action == "flip":
+        return apply_flip_row(state, row_uid)
+    return apply_add_candidate(state, chosen)
+
+
+def run_recomputed_curve_steps(
+    bt_model,
+    objective_factory,
+    action: str,
+    *,
+    steps: int,
+    influence_method: str,
+    candidate_mode: str | None,
+    order_mode: str,
+    random_seed: int,
+) -> pd.DataFrame:
+    state = make_state(bt_model)
+    current_model = bt_model
+    rng = np.random.default_rng(random_seed)
+    rows = [{"step": 0, "objective_value": float(objective_factory(current_model).value(current_model))}]
+
+    for step in range(1, int(steps) + 1):
+        objective = objective_factory(current_model)
+        report = compute_all_action_influences(
+            current_model,
+            objective,
+            action,
+            influence_method=influence_method,
+            candidate_mode=candidate_mode,
+        )
+        report = _dedupe_action_report(report, action)
+        if report.empty:
+            break
+
+        if order_mode == "greedy":
+            report = report.copy()
+            report["influence"] = -report["influence"].astype(float)
+        chosen = _choose_candidate(report, order_mode=order_mode, rng=rng)
+        if chosen is None:
+            break
+
+        state = _apply_single_action(state, action, chosen)
+        current_model = fit_model_from_state(bt_model, state)
+        updated_objective = objective_factory(current_model)
+        rows.append({"step": step, "objective_value": float(updated_objective.value(current_model))})
+
+    return pd.DataFrame(rows)
 
 
 def run_dataset(
@@ -336,36 +398,44 @@ def run_dataset(
     tau_temperature: float,
 ) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, object]]:
     bt_model = built["bt_model"]
-    ranking_order = ranking_from_model(bt_model)
-    tau_obj = KendallTauObjective(ranking=ranking_order, temperature=tau_temperature)
-    ci_obj = TraceUncertaintyObjective()
+
+    def tau_factory(model) -> KendallTauObjective:
+        return KendallTauObjective(ranking=ranking_from_model(model), temperature=tau_temperature)
+
+    def trace_factory(_model) -> TraceUncertaintyObjective:
+        return TraceUncertaintyObjective()
 
     objective_specs = [
-        ("kendall_tau", tau_obj, "Normalized Kendall-tau surrogate", True),
-        ("trace_uncertainty", ci_obj, "Trace uncertainty proxy", False),
+        ("kendall_tau", tau_factory, "Normalized Kendall-tau surrogate", True),
+        ("trace_uncertainty", trace_factory, "Trace uncertainty proxy", False),
     ]
 
     curve_tables: list[pd.DataFrame] = []
     summary_rows: list[dict[str, object]] = []
 
-    for objective_key, objective, ylabel, normalize_for_plot in objective_specs:
+    for objective_key, objective_factory, ylabel, normalize_for_plot in objective_specs:
         curve_map: dict[str, tuple[pd.DataFrame, pd.DataFrame]] = {}
         for offset, spec in enumerate(VARIANTS):
-            base_report = compute_all_action_influences(
+            greedy_curve = run_recomputed_curve_steps(
                 bt_model,
-                objective,
+                objective_factory,
                 spec["action"],
+                steps=curve_steps,
                 influence_method="1sn",
                 candidate_mode=spec["candidate_mode"],
+                order_mode="greedy",
+                random_seed=random_seed + offset,
             )
-            greedy_report = make_selection_report(base_report, ascending=True)
-            random_report = make_selection_report(
-                base_report,
-                ascending=True,
+            random_curve = run_recomputed_curve_steps(
+                bt_model,
+                objective_factory,
+                spec["action"],
+                steps=curve_steps,
+                influence_method="1sn",
+                candidate_mode=spec["candidate_mode"],
+                order_mode="random",
                 random_seed=random_seed + (100 if objective_key == "trace_uncertainty" else 0) + offset,
             )
-            greedy_curve = run_order_curve(bt_model, objective, spec["action"], greedy_report, steps=curve_steps)
-            random_curve = run_order_curve(bt_model, objective, spec["action"], random_report, steps=curve_steps)
 
             greedy_curve = augment_curve(
                 greedy_curve,
@@ -415,9 +485,9 @@ def run_dataset(
             )
 
         plot_title = (
-            f"{built['dataset_name']}: Kendall tau vs actions"
+            f"{built['dataset_name']}: Kendall tau vs actions (recomputed influences)"
             if objective_key == "kendall_tau"
-            else f"{built['dataset_name']}: trace uncertainty proxy vs actions"
+            else f"{built['dataset_name']}: trace uncertainty proxy vs actions (recomputed influences)"
         )
         path_stem = output_dir / f"{built['dataset_key']}_{objective_key}_curves"
         plot_curve_panel(
@@ -430,6 +500,7 @@ def run_dataset(
 
     curves_df = pd.concat(curve_tables, ignore_index=True)
     summary_df = pd.DataFrame(summary_rows)
+    ranking_order = ranking_from_model(bt_model)
     meta = {
         "dataset_key": built["dataset_key"],
         "dataset_name": built["dataset_name"],
@@ -440,6 +511,7 @@ def run_dataset(
         "top2": ranking_order[1],
         "tau_temperature": float(tau_temperature),
         "curve_steps_requested": int(curve_steps),
+        "influence_recomputed_each_step": True,
     }
     return curves_df, summary_df, meta
 
@@ -475,7 +547,7 @@ def main() -> None:
         print(f"Loading {dataset_key} ...", flush=True)
         built = build_named_dataset_model(dataset_key)
         print(
-            f"Running {built['dataset_key']} ({int(built['dataset'].n_matches)} fitted rows) ...",
+            f"Running {built['dataset_key']} ({int(built['dataset'].n_matches)} fitted rows) with recomputed influences ...",
             flush=True,
         )
         curves_df, summary_df, meta = run_dataset(
