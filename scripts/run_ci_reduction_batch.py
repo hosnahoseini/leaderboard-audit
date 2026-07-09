@@ -15,8 +15,18 @@ if str(SRC) not in sys.path:
 from clean_bt_rank import available_hf_battle_datasets, load_named_battle_data, run_ci_reduction_batch
 
 
+DEFAULT_INFLUENCE_VARIANT_POLICIES: tuple[str, ...] = (
+    "influence_v1",
+    "influence_v2",
+    "influence_v3",
+    "influence_v4",
+)
+
+
 def resolve_dataset_order(dataset_keys: list[str], order_mode: str) -> tuple[list[str], list[tuple[str, int]]]:
     keys = [str(key) for key in dataset_keys]
+    if order_mode == "provided":
+        return keys, []
     if order_mode == "alpha":
         ordered = sorted(keys)
         return ordered, []
@@ -42,7 +52,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--dataset-order",
-        choices=("alpha", "size_asc", "size_desc"),
+        choices=("provided", "alpha", "size_asc", "size_desc"),
         default="alpha",
         help="How to order datasets before running the batch.",
     )
@@ -71,9 +81,41 @@ def parse_args() -> argparse.Namespace:
         help="Stochastic policy family to repeat across random trials.",
     )
     parser.add_argument(
+        "--outcome-mode",
+        choices=("stochastic", "deterministic"),
+        default="deterministic",
+        help="How pair-selection policies realize the added match label.",
+    )
+    parser.add_argument(
         "--primary-policy",
         default="influence",
         help="Policy treated as the main method in summary tables.",
+    )
+    parser.add_argument(
+        "--compare-influence-variants",
+        action="store_true",
+        help="Shortcut for comparing influence variants against Arena Active and random.",
+    )
+    parser.add_argument(
+        "--influence-variant-policies",
+        nargs="+",
+        default=DEFAULT_INFLUENCE_VARIANT_POLICIES,
+        help="Influence-style policies to use with --compare-influence-variants.",
+    )
+    parser.add_argument(
+        "--arena-policy",
+        default="arena_active_pair",
+        help="Arena Active policy to use with --compare-influence-variants.",
+    )
+    parser.add_argument(
+        "--variant-random-policy",
+        default="random_pair",
+        help="Random baseline to use with --compare-influence-variants.",
+    )
+    parser.add_argument(
+        "--variant-primary-policy",
+        default="influence_v4",
+        help="Primary policy to use with --compare-influence-variants.",
     )
     parser.add_argument("--random-seed", type=int, default=0, help="Base random seed.")
     parser.add_argument(
@@ -94,6 +136,16 @@ def main() -> None:
     args = parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
     (args.output_dir / "status.txt").write_text("resolving dataset order...\n")
+    policies = list(args.policies)
+    random_policy = args.random_policy
+    primary_policy = args.primary_policy
+    candidate_mode = args.candidate_mode
+    if args.compare_influence_variants:
+        policies = [*args.influence_variant_policies, args.arena_policy]
+        random_policy = args.variant_random_policy
+        primary_policy = args.variant_primary_policy
+        candidate_mode = "all_pairs"
+
     datasets, size_rows = resolve_dataset_order(list(args.datasets), args.dataset_order)
     print("Resolved dataset order:", flush=True)
     for idx, dataset_key in enumerate(datasets, start=1):
@@ -103,6 +155,13 @@ def main() -> None:
                 size_suffix = f" ({n_rows} battle rows)"
                 break
         print(f"{idx:>2}. {dataset_key}{size_suffix}", flush=True)
+
+    if args.compare_influence_variants:
+        print("\nUsing influence-variant comparison preset:", flush=True)
+        print(f"  policies: {policies}", flush=True)
+        print(f"  random_policy: {random_policy}", flush=True)
+        print(f"  primary_policy: {primary_policy}", flush=True)
+        print(f"  candidate_mode: {candidate_mode}", flush=True)
 
     if args.dry_run:
         (args.output_dir / "status.txt").write_text("dry run complete\n")
@@ -116,12 +175,13 @@ def main() -> None:
         n_random_trials=args.n_random_trials,
         ci_method=args.ci_method,
         influence_method=args.influence_method,
-        candidate_mode=args.candidate_mode,
+        candidate_mode=candidate_mode,
         random_seed=args.random_seed,
         output_dir=args.output_dir,
-        policies=args.policies,
-        random_policy=args.random_policy,
-        primary_policy=args.primary_policy,
+        policies=policies,
+        random_policy=random_policy,
+        primary_policy=primary_policy,
+        outcome_mode=args.outcome_mode,
     )
     (args.output_dir / "status.txt").write_text("batch complete\n")
     print("\n=== CI Reduction Summary ===", flush=True)

@@ -58,6 +58,10 @@ def _uses_forward_reverse_pairs(report: pd.DataFrame) -> bool:
     return "match_id" in report.columns and "match_copy" in report.columns
 
 
+def _use_match_grouping(action: str, report: pd.DataFrame) -> bool:
+    return _uses_forward_reverse_pairs(report)
+
+
 def _normalize_pair_for_baseline_semantics(
     bt_model: BradleyTerryModel,
     player_a: int | str,
@@ -81,17 +85,21 @@ def _select_top_alpha_matches(
     if limit == 0 or report.empty:
         return report.head(0).copy()
 
-    influence = report["influence"].to_numpy(dtype=float)
-    order = np.argsort(influence)
-    if not sort_ascending:
-        order = order[::-1]
+    if not group_by_match or not _uses_forward_reverse_pairs(report):
+        influence = report["influence"].to_numpy(dtype=float)
+        order = np.argsort(influence)
+        if not sort_ascending:
+            order = order[::-1]
+        return report.iloc[order].head(limit).reset_index(drop=True)
 
-    ranked = report.iloc[order].reset_index(drop=True)
-    if not group_by_match or not _uses_forward_reverse_pairs(ranked):
-        return ranked.head(limit).reset_index(drop=True)
-
-    top_match_ids = ranked["match_id"].drop_duplicates().head(limit).to_list()
-    selected = ranked.loc[ranked["match_id"].isin(top_match_ids)].copy()
+    ranked_match_ids = (
+        report.groupby("match_id", sort=False, as_index=False)["influence"]
+        .sum()
+        .sort_values("influence", ascending=sort_ascending, kind="stable")["match_id"]
+        .head(limit)
+        .tolist()
+    )
+    selected = report.loc[report["match_id"].isin(ranked_match_ids)].copy()
     return selected.reset_index(drop=True)
 
 
@@ -171,12 +179,13 @@ def refit_model_with_action(
     frame = _match_frame_with_row_uid(bt_model)
 
     if action in {"drop", "flip"}:
-        mask = _paired_action_mask(frame, selected_matches)
         if action == "drop":
+            mask = _paired_action_mask(frame, selected_matches)
             X = X[~mask]
             y = y[~mask]
             frame = frame.loc[~mask].reset_index(drop=True)
         else:
+            mask = _paired_action_mask(frame, selected_matches)
             y[mask] = 1.0 - y[mask]
             if "winner" in frame.columns:
                 frame.loc[mask, "winner"] = y[mask]
@@ -250,6 +259,7 @@ def apply_action_on_top_alpha_influential_matches(
 ) -> dict[str, object]:
     action = _normalize_action(action)
     recompute_mode = _normalize_recompute_mode(recompute_mode)
+    use_match_grouping = group_by_match and _use_match_grouping(action, _coerce_influence_report(influence_scores))
 
     initial_value = float(objective.value(bt_model))
     report = _coerce_influence_report(influence_scores)
@@ -257,7 +267,7 @@ def apply_action_on_top_alpha_influential_matches(
         report,
         alpha,
         sort_ascending=sort_ascending,
-        group_by_match=group_by_match,
+        group_by_match=use_match_grouping,
     )
     if selected.empty:
         return {
@@ -272,7 +282,7 @@ def apply_action_on_top_alpha_influential_matches(
         return {
             "initial_value": initial_value,
             "final_value": initial_value + float(selected["influence"].sum()),
-            "n_applied": _logical_selection_size(selected),
+            "n_applied": _logical_selection_size(selected) if use_match_grouping else int(len(selected)),
             "selected_matches": selected,
             "objective_met": None,
         }
@@ -286,7 +296,7 @@ def apply_action_on_top_alpha_influential_matches(
     return {
         "initial_value": initial_value,
         "final_value": final_value,
-        "n_applied": _logical_selection_size(selected),
+        "n_applied": _logical_selection_size(selected) if use_match_grouping else int(len(selected)),
         "selected_matches": selected,
         "objective_met": None,
     }
@@ -303,12 +313,12 @@ def find_minimum_alpha_to_meet_objective(
     max_alpha: int | None = None,
     recompute_mode: str = "refit",
 ) -> dict[str, object]:
-    report = _coerce_influence_report(influence_scores).sort_values("influence", ascending=False).reset_index(drop=True)
+    report = _coerce_influence_report(influence_scores).reset_index(drop=True)
     if report.empty:
         return {"met": False, "alpha": None, "result": None}
 
     alpha = max(1, int(start_alpha))
-    max_selectable = _selection_limit(report)
+    max_selectable = _selection_limit(report) if _use_match_grouping(action, report) else len(report)
     limit = max_selectable if max_alpha is None else min(max_selectable, int(max_alpha))
     while alpha <= limit:
         result = apply_action_on_top_alpha_influential_matches(
@@ -602,9 +612,10 @@ def run_objective_curve_steps(
     steps: int,
     recompute_mode: str = "refit",
 ) -> pd.DataFrame:
-    report = _coerce_influence_report(influence_scores).sort_values("influence", ascending=False).reset_index(drop=True)
+    report = _coerce_influence_report(influence_scores).reset_index(drop=True)
     rows = [{"step": 0, "objective_value": float(objective.value(bt_model))}]
-    for alpha in range(1, min(int(steps), len(report)) + 1):
+    max_steps = _selection_limit(report) if _use_match_grouping(action, report) else len(report)
+    for alpha in range(1, min(int(steps), max_steps) + 1):
         result = apply_action_on_top_alpha_influential_matches(
             bt_model,
             objective,

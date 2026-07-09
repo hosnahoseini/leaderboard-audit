@@ -17,6 +17,8 @@ from clean_bt_rank import available_hf_battle_datasets, load_named_battle_data, 
 
 def resolve_dataset_order(dataset_keys: list[str], order_mode: str) -> tuple[list[str], list[tuple[str, int]]]:
     keys = [str(key) for key in dataset_keys]
+    if order_mode == "provided":
+        return keys, []
     if order_mode == "alpha":
         ordered = sorted(keys)
         return ordered, []
@@ -34,7 +36,7 @@ def resolve_dataset_order(dataset_keys: list[str], order_mode: str) -> tuple[lis
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run the fair CI-reduction comparison: influence(all_pairs) vs arena_active(all_pairs-like)."
+        description="Run the fair CI-reduction comparison: influence pair selection vs Arena Active pair selection, with the added label taken from the current BT argmax winner by default."
     )
     parser.add_argument(
         "--datasets",
@@ -44,7 +46,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--dataset-order",
-        choices=("alpha", "size_asc", "size_desc"),
+        choices=("provided", "alpha", "size_asc", "size_desc"),
         default="size_asc",
         help="How to order datasets before running the comparison.",
     )
@@ -62,10 +64,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=Path("notebooks/artifacts/ci_reduction_fair_all_pairs_vs_arena_active"),
+        default=Path("notebooks/artifacts/ci_reduction_fair_expected_pair_vs_arena_active_pair"),
         help="Directory for CSV outputs and the pooled figure.",
     )
     parser.add_argument("--random-seed", type=int, default=0, help="Base random seed.")
+    parser.add_argument(
+        "--outcome-mode",
+        choices=("stochastic", "deterministic"),
+        default="deterministic",
+        help="How to realize the selected pair outcome from the current BT model.",
+    )
     parser.add_argument(
         "--dry-run",
         action="store_true",
@@ -104,11 +112,12 @@ def main() -> None:
         candidate_mode="all_pairs",
         random_seed=args.random_seed,
         output_dir=args.output_dir,
-        policies=("influence", "arena_active"),
-        primary_policy="influence",
+        policies=("expected_pair", "arena_active_pair"),
+        primary_policy="expected_pair",
+        outcome_mode=args.outcome_mode,
     )
     (args.output_dir / "status.txt").write_text("batch complete\n")
-    print("\n=== Fair Comparison Summary ===", flush=True)
+    print(f"\n=== Fair Pair-Selection Comparison Summary ({args.outcome_mode}) ===", flush=True)
     print(result.summary_table.to_string(index=False), flush=True)
     print(f"\nSaved artifacts to: {args.output_dir.resolve()}", flush=True)
 

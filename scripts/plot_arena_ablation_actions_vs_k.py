@@ -44,6 +44,11 @@ def parse_args() -> argparse.Namespace:
         default="arena55k_topk_actions_needed_curve_neurips",
         help="Output filename stem.",
     )
+    parser.add_argument(
+        "--title",
+        default=None,
+        help="Optional explicit plot title. Defaults to the dataset_name column when present.",
+    )
     return parser.parse_args()
 
 
@@ -55,7 +60,7 @@ def _variant_order(df: pd.DataFrame) -> list[str]:
     return ordered
 
 
-def make_plot(summary_df: pd.DataFrame) -> plt.Figure:
+def make_plot(summary_df: pd.DataFrame, *, title: str | None = None) -> plt.Figure:
     use_paper_rc()
 
     df = summary_df.copy()
@@ -100,7 +105,9 @@ def make_plot(summary_df: pd.DataFrame) -> plt.Figure:
     ax.get_xaxis().set_major_formatter(ScalarFormatter())
     ax.set_xlabel("Top-k boundary $k$")
     ax.set_ylabel("# actions needed")
-    ax.set_title("Chatbot Arena 55k", pad=10)
+    if title is None and "dataset_name" in df.columns and len(df):
+        title = str(df["dataset_name"].iloc[0])
+    ax.set_title(title or "Actions Needed vs Top-k", pad=10)
 
     ax.grid(True, which="major", axis="y", color="#d0d0d0", linewidth=0.75, alpha=0.8)
     ax.grid(True, which="minor", axis="y", color="#ececec", linewidth=0.55, alpha=0.9)
@@ -130,7 +137,7 @@ def main() -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     summary_df = pd.read_csv(input_path)
-    fig = make_plot(summary_df)
+    fig = make_plot(summary_df, title=args.title)
     fig.savefig(output_dir / f"{args.stem}.pdf", bbox_inches="tight", pad_inches=0.02)
     fig.savefig(output_dir / f"{args.stem}.png", bbox_inches="tight", pad_inches=0.02)
     plt.close(fig)

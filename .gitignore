@@ -1,3 +1,5 @@
+# Exploratory / superseded scripts kept only on the author's machine.
+# Scripts required to reproduce thesis figures live in scripts/ and are tracked.
 notebooks
 scripts/extra
 
@@ -21,16 +23,20 @@ htmlcov/
 venv/
 env/
 
-# Generated experiment outputs and logs
+# Generated experiment outputs and logs.
+# Small CSVs that back the published figures are committed under figure_data/.
 jobs/
 logs/
 new_result/
 new_action_handling_result/
 final_result/
-tests/
+
+# Vendored duplicate of IsRankingRobust (174 MB) and test scratch output.
+# The canonical vendored copy is the top-level IsRankingRobust/.
+tests/test/
 tests/artifacts/
 
-# Large local exports and presentation scratch files
+# Large local exports, manuscripts, and presentation scratch files
 *.zip
 *.key
 *.pptx
@@ -41,3 +47,8 @@ FINAL/
 slide_clips/
 presentation_animations/
 -u501-hoyarhos-clean-bt-rank/
+
+# Thesis / paper manuscript sources and builds
+thesis_Hosna.pdf
+CTB_ICML2026_final_draft.pdf
+*.tex

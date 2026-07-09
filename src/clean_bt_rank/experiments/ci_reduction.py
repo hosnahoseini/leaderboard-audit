@@ -42,6 +42,78 @@ class CIReductionResult:
         }
 
 
+@dataclass(frozen=True)
+class PolicySpec:
+    policy: str
+    candidate_mode: str
+    pair_mode: bool
+    add_argmax_label: bool
+
+
+POLICY_ALIASES: dict[str, PolicySpec] = {
+    "influence_pairs": PolicySpec(
+        policy="influence",
+        candidate_mode="all_pairs",
+        pair_mode=True,
+        add_argmax_label=True,
+    ),
+    "influence_all_outcomes": PolicySpec(
+        policy="influence",
+        candidate_mode="all_outcomes",
+        pair_mode=True,
+        add_argmax_label=True,
+    ),
+    "influence_weighted_outcomes": PolicySpec(
+        policy="influence",
+        candidate_mode="all_outcomes_weighted",
+        pair_mode=True,
+        add_argmax_label=True,
+    ),
+    "influence_expected_pair": PolicySpec(
+        policy="expected_pair",
+        candidate_mode="all_pairs",
+        pair_mode=True,
+        add_argmax_label=True,
+    ),
+    "influence_v1": PolicySpec(
+        policy="influence",
+        candidate_mode="all_pairs",
+        pair_mode=True,
+        add_argmax_label=True,
+    ),
+    "influence_v2": PolicySpec(
+        policy="influence",
+        candidate_mode="all_outcomes",
+        pair_mode=True,
+        add_argmax_label=True,
+    ),
+    "influence_v3": PolicySpec(
+        policy="influence",
+        candidate_mode="all_outcomes_weighted",
+        pair_mode=True,
+        add_argmax_label=True,
+    ),
+    "influence_v4": PolicySpec(
+        policy="expected_pair",
+        candidate_mode="all_pairs",
+        pair_mode=True,
+        add_argmax_label=True,
+    ),
+}
+
+
+def _resolve_policy_spec(policy: str, candidate_mode: str) -> PolicySpec:
+    normalized_policy = policy.lower()
+    if normalized_policy in POLICY_ALIASES:
+        return POLICY_ALIASES[normalized_policy]
+    return PolicySpec(
+        policy=normalized_policy,
+        candidate_mode=candidate_mode.lower(),
+        pair_mode=candidate_mode.lower() == "all_pairs" or normalized_policy in {"expected_pair", "random_pair", "arena_active_pair"},
+        add_argmax_label=False,
+    )
+
+
 def run_ci_reduction_experiment(
     bt_model: BradleyTerryModel,
     *,
@@ -53,12 +125,17 @@ def run_ci_reduction_experiment(
     arena_active_mode: str = "target_only",
     random_seed: int = 0,
     candidate_mode: str = "all_pairs",
+    outcome_mode: str = "deterministic",
 ) -> CIReductionResult:
     """
     Reduce a target player's uncertainty by iteratively adding rows.
 
     Policies:
-    - `influence`: one-shot influence ranking (computed once on the original model)
+    - `influence`: fixed initial influence ranking computed once on the fitted input model
+    - `influence_pairs`: influence over unordered pairs with argmax-skill winner labels
+    - `influence_all_outcomes`: influence over both outcomes per pair, but add argmax-skill winner labels
+    - `influence_weighted_outcomes`: same as `influence_all_outcomes`, weighted by BT outcome probability
+    - `influence_expected_pair`: pair score `p(win) * I(win) + p(loss) * I(loss)`, then add argmax-skill winner labels
     - `random`: sample uniformly from the candidate pool
     - `active_ranking`: highest logistic variance p(1-p)
     - `arena_active`: Chatbot Arena pair-variance / pair-count heuristic
@@ -71,9 +148,15 @@ def run_ci_reduction_experiment(
     - `all_outcomes`: one candidate per ordered pair (both directions, outcome=1)
     - `all_outcomes_weighted`: same as all_outcomes but influence weighted by win probability
     arena_active always uses all_pairs internally.
+    outcome_mode controls how pair-based policies realize the match outcome:
+    - `stochastic`: Bernoulli sample from the current BT pair win probability
+    - `deterministic`: set the outcome to the BT argmax winner
     """
     bt_model._require_fit()
-    policy = policy.lower()
+    requested_policy = policy.lower()
+    policy_spec = _resolve_policy_spec(requested_policy, candidate_mode)
+    policy = policy_spec.policy
+    candidate_mode = policy_spec.candidate_mode
     valid_policies = {
         "influence",
         "random",
@@ -87,54 +170,48 @@ def run_ci_reduction_experiment(
         raise ValueError(f"policy must be one of {sorted(valid_policies)}.")
     if budget < 0:
         raise ValueError("budget must be non-negative.")
-    candidate_mode = candidate_mode.lower()
     if candidate_mode not in {"all_pairs", "all_outcomes", "all_outcomes_weighted"}:
         raise ValueError("candidate_mode must be 'all_pairs', 'all_outcomes', or 'all_outcomes_weighted'.")
     if policy in {"expected_pair", "random_pair", "arena_active_pair"} and candidate_mode != "all_pairs":
         raise ValueError(f"policy='{policy}' requires candidate_mode='all_pairs'.")
+    outcome_mode = outcome_mode.lower()
+    if outcome_mode not in {"stochastic", "deterministic"}:
+        raise ValueError("outcome_mode must be 'stochastic' or 'deterministic'.")
 
     rng = np.random.default_rng(random_seed)
     objective = PlayerUncertaintyObjective(target_player)
     arena_active = ArenaActiveSamplingBaseline(mode=arena_active_mode)
     current_model = bt_model
     state = make_state(bt_model)
-    history_rows = [_ci_history_row(current_model, target_player, objective, ci_method, step=0, policy=policy)]
+    history_rows = [_ci_history_row(current_model, target_player, objective, ci_method, step=0, policy=requested_policy)]
     selected_rows: list[dict[str, object]] = []
     used_keys: set[tuple[str, str]] = set()
+    fixed_influence_report: pd.DataFrame | None = None
 
-    # Influence: compute once on the original model, then add candidates in ranked order.
-    # This avoids recomputing influence (expensive matrix ops) at every step.
     if policy == "influence":
-        _initial_report = compute_influence(
-            bt_model,
+        fixed_influence_report = compute_influence(
+            current_model,
             objective,
             action="add",
             method=influence_method,
             candidate_mode=candidate_mode,
-        )
-        _ranked_candidates = _initial_report.sort_values("influence", ascending=True).reset_index(drop=True)
-        _ranked_idx = 0
+        ).sort_values("influence", ascending=True, kind="stable").reset_index(drop=True)
 
     for step in range(1, budget + 1):
         if policy == "influence":
-            # Walk the pre-sorted list, skipping already-used pairs.
-            chosen = None
-            while _ranked_idx < len(_ranked_candidates):
-                row = _ranked_candidates.iloc[_ranked_idx].copy()
-                _ranked_idx += 1
-                key = _used_candidate_key(row, pair_mode=(candidate_mode == "all_pairs"))
-                if key not in used_keys:
-                    row["selection_score"] = float(row["influence"])
-                    chosen = row
-                    break
-            if chosen is None:
+            assert fixed_influence_report is not None
+            report = fixed_influence_report
+            report = _filter_used_add_candidates(report, used_keys, pair_mode=policy_spec.pair_mode)
+            if report.empty:
                 break
+            chosen = report.iloc[0].copy()
+            chosen["selection_score"] = float(chosen["influence"])
         elif policy in {"random", "active_ranking"}:
             candidates = build_add_candidates(current_model, mode=candidate_mode)
             report = candidates.frame.copy()
             report["_candidate_x"] = list(np.asarray(candidates.X, dtype=float))
             report["influence"] = np.nan
-            report = _filter_used_add_candidates(report, used_keys, pair_mode=(candidate_mode == "all_pairs"))
+            report = _filter_used_add_candidates(report, used_keys, pair_mode=policy_spec.pair_mode)
             if report.empty:
                 break
             if policy == "active_ranking":
@@ -149,14 +226,14 @@ def run_ci_reduction_experiment(
                 break
             chosen = report.sort_values("expected_influence", ascending=True).iloc[0].copy()
             chosen["selection_score"] = float(chosen["expected_influence"])
-            chosen = _realize_sampled_pair_outcome(chosen, rng)
+            chosen = _realize_sampled_pair_outcome(chosen, rng, outcome_mode=outcome_mode)
         elif policy == "random_pair":
             report = _pair_candidate_report(current_model, used_keys=used_keys)
             if report.empty:
                 break
             chosen = report.iloc[int(rng.integers(0, len(report)))].copy()
             chosen["selection_score"] = np.nan
-            chosen = _realize_sampled_pair_outcome(chosen, rng)
+            chosen = _realize_sampled_pair_outcome(chosen, rng, outcome_mode=outcome_mode)
         else:  # arena_active / arena_active_pair
             report = arena_active.score_candidates(current_model, target_player=target_player, used_keys=used_keys)
             if report.empty:
@@ -164,16 +241,18 @@ def run_ci_reduction_experiment(
             chosen = report.sort_values("arena_active_score", ascending=False).iloc[0].copy()
             chosen["selection_score"] = float(chosen["arena_active_score"])
             if policy == "arena_active_pair":
-                chosen = _realize_sampled_pair_outcome(chosen, rng)
+                chosen = _realize_sampled_pair_outcome(chosen, rng, outcome_mode=outcome_mode)
 
-        used_keys.add(_used_candidate_key(chosen, pair_mode=(policy in {"expected_pair", "random_pair", "arena_active_pair"} or candidate_mode == "all_pairs")))
-        selected_rows.append(_selected_action_row(chosen, step=step, policy=policy))
+        if policy_spec.add_argmax_label:
+            chosen = _canonicalize_to_pair_argmax(chosen)
+        used_keys.add(_used_candidate_key(chosen, pair_mode=policy_spec.pair_mode))
+        selected_rows.append(_selected_action_row(chosen, step=step, policy=requested_policy))
         state = apply_add_candidate(state, chosen)
         current_model = fit_model_from_state(bt_model, state)
-        history_rows.append(_ci_history_row(current_model, target_player, objective, ci_method, step=step, policy=policy))
+        history_rows.append(_ci_history_row(current_model, target_player, objective, ci_method, step=step, policy=requested_policy))
 
     return CIReductionResult(
-        policy=policy,
+        policy=requested_policy,
         target_player=target_player,
         ci_method=ci_method,
         selection_objective=objective.name,
@@ -197,6 +276,7 @@ def run_ci_reduction_benchmark(
     policies: list[str] | None = None,
     candidate_mode: str = "all_pairs",
     random_policy: str = "random",
+    outcome_mode: str = "deterministic",
 ) -> tuple[dict[str, CIReductionResult | list[CIReductionResult]], pd.DataFrame, pd.DataFrame]:
     """
     Run the CI reduction benchmark.
@@ -225,6 +305,7 @@ def run_ci_reduction_benchmark(
             arena_active_mode=arena_active_mode,
             random_seed=random_seed,
             candidate_mode=candidate_mode,
+            outcome_mode=outcome_mode,
         )
 
     random_results = [
@@ -238,6 +319,7 @@ def run_ci_reduction_benchmark(
             arena_active_mode=arena_active_mode,
             random_seed=random_seed + trial,
             candidate_mode=candidate_mode,
+            outcome_mode=outcome_mode,
         )
         for trial in range(n_random_trials)
     ]
@@ -338,13 +420,46 @@ def _used_candidate_key(row: pd.Series, *, pair_mode: bool) -> tuple[str, str]:
 def _realize_sampled_pair_outcome(
     chosen: pd.Series,
     rng: np.random.Generator,
+    *,
+    outcome_mode: str,
 ) -> pd.Series:
     realized = chosen.copy()
     prob = float(realized["candidate_probability"])
-    outcome = float(rng.random() < prob)
+    if outcome_mode == "stochastic":
+        outcome = float(rng.random() < prob)
+    elif outcome_mode == "deterministic":
+        outcome = float(prob >= 0.5)
+    else:
+        raise ValueError(f"Unsupported outcome_mode {outcome_mode!r}.")
+    realized["outcome_mode"] = outcome_mode
     realized["outcome_probability"] = prob
     realized["realized_outcome"] = outcome
     realized["outcome"] = outcome
+    return realized
+
+
+def _canonicalize_to_pair_argmax(chosen: pd.Series) -> pd.Series:
+    realized = chosen.copy()
+    realized["selected_model_a"] = str(chosen["model_a"])
+    realized["selected_model_b"] = str(chosen["model_b"])
+    realized["selected_outcome"] = float(chosen.get("outcome", 1.0))
+    prob = float(realized.get("candidate_probability", 0.5))
+    forward_x = np.asarray(realized["_candidate_x"], dtype=float)
+    if prob >= 0.5:
+        realized["outcome_probability"] = prob
+        realized["realized_outcome"] = 1.0
+        realized["outcome_mode"] = "deterministic_argmax"
+        realized["outcome"] = 1.0
+        return realized
+
+    realized["model_a"] = chosen["model_b"]
+    realized["model_b"] = chosen["model_a"]
+    realized["_candidate_x"] = -forward_x
+    realized["candidate_probability"] = 1.0 - prob
+    realized["outcome_probability"] = 1.0 - prob
+    realized["realized_outcome"] = 1.0
+    realized["outcome_mode"] = "deterministic_argmax"
+    realized["outcome"] = 1.0
     return realized
 
 

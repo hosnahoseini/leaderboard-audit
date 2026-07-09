@@ -67,6 +67,8 @@ def set_active_variants(variant_names: Optional[list[str]]) -> None:
 
 def resolve_dataset_order(dataset_keys: list[str], order_mode: str) -> tuple[list[str], list[tuple[str, int]]]:
     keys = [str(key) for key in dataset_keys]
+    if order_mode == "provided":
+        return keys, []
     if order_mode == "alpha":
         ordered = sorted(keys)
         return ordered, []
@@ -170,7 +172,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--dataset-order",
-        choices=("alpha", "size_asc", "size_desc"),
+        choices=("provided", "alpha", "size_asc", "size_desc"),
         default="size_asc",
         help="How to order datasets before running the batch.",
     )
@@ -249,46 +251,17 @@ def save_ranking_before_after_artifacts(
     pdf_path = output_dir / f"{stem}.pdf"
     png_path = output_dir / f"{stem}.png"
 
-    ranking_before_plot_df = ranking_before_df.copy()
-    ranking_after_plot_df = ranking_after_df.copy()
-    if context_players:
-        before_idx = ranking_before_df.set_index("competitor")
-        after_idx = ranking_after_df.set_index("competitor")
-        valid_players = [player for player in context_players if player in before_idx.index and player in after_idx.index]
-        if valid_players:
-            all_ranks = []
-            for player in valid_players:
-                all_ranks.append(int(before_idx.loc[player, "rank"]))
-                all_ranks.append(int(after_idx.loc[player, "rank"]))
-            rank_lo = min(all_ranks)
-            rank_hi = max(all_ranks)
-            width = max(1, int(plot_context_size))
-            span = rank_hi - rank_lo + 1
-            extra = max(0, width - span)
-            pad_left = extra // 2
-            pad_right = extra - pad_left
-            start_rank = max(1, rank_lo - pad_left)
-            end_rank = start_rank + width - 1
-            if end_rank > len(ranking_before_df):
-                end_rank = len(ranking_before_df)
-                start_rank = max(1, end_rank - width + 1)
-            visible_players = ranking_before_df.loc[
-                ranking_before_df["rank"].between(start_rank, end_rank),
-                "competitor",
-            ].tolist()
-            ranking_before_plot_df = ranking_before_df.loc[ranking_before_df["competitor"].isin(visible_players)].copy()
-            ranking_after_plot_df = ranking_after_df.loc[ranking_after_df["competitor"].isin(visible_players)].copy()
-
     ranking_before_df.to_csv(before_csv, index=False)
     ranking_after_df.to_csv(after_csv, index=False)
 
     fig, _ = plot_ranking_before_after(
-        ranking_before_plot_df,
-        ranking_after_plot_df,
+        ranking_before_df,
+        ranking_after_df,
         target_player=target_player,
         k=k,
-        title=f"{dataset_name}: {method_key} {variant_key}",
+        title=f"{dataset_name}: {method_key} {variant_key} (k={k})",
         show_ci=True,
+        max_visible_ranks=plot_context_size if context_players else None,
     )
     fig.savefig(pdf_path, bbox_inches="tight", pad_inches=0.03)
     fig.savefig(png_path, bbox_inches="tight", pad_inches=0.03)

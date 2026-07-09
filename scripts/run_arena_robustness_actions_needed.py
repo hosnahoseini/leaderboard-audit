@@ -34,8 +34,9 @@ from clean_bt_rank import (
     ranking_from_model,
     use_paper_rc,
 )
-from clean_bt_rank.iterative_actions import gap_based_objective_search_across_player_pairs
-from package.RankAMIP.logistic import isRankingRobust
+from clean_bt_rank.iterative_actions import compute_all_action_influences, gap_based_objective_search_across_player_pairs
+from clean_bt_rank.objectives import SkillGapObjective
+from package.RankAMIP.logistic import LogisticAMIP, isRankingRobust
 from verify_against_baseline import baseline_matchups_as_player_pairs
 
 
@@ -59,7 +60,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--dataset-order",
-        choices=("alpha", "size_asc", "size_desc"),
+        choices=("provided", "alpha", "size_asc", "size_desc"),
         default="size_asc",
         help="How to order datasets before running the batch.",
     )
@@ -89,6 +90,8 @@ def compute_max_actions(n_rows: int, fraction: float) -> int:
 
 def resolve_dataset_order(dataset_keys: list[str], order_mode: str) -> tuple[list[str], list[tuple[str, int]]]:
     keys = [str(key) for key in dataset_keys]
+    if order_mode == "provided":
+        return keys, []
     if order_mode == "alpha":
         ordered = sorted(keys)
         return ordered, []
@@ -137,6 +140,25 @@ def baseline_free_index_to_name(bt_model: BradleyTerryModel, free_idx: Optional[
         return bt_model.competitor_names_[bt_model.reference_player]
     full_idx = free_idx if free_idx < bt_model.reference_player else free_idx + 1
     return bt_model.competitor_names_[full_idx]
+
+
+def free_index_from_player(bt_model: BradleyTerryModel, player: str) -> Optional[int]:
+    full_idx = int(bt_model.resolve_player(player))
+    if full_idx == bt_model.reference_player:
+        return None
+    return full_idx - 1 if full_idx > bt_model.reference_player else full_idx
+
+
+def baseline_drop_influence(amip: LogisticAMIP, bt_model: BradleyTerryModel, player_a: str, player_b: str) -> np.ndarray:
+    free_a = free_index_from_player(bt_model, player_a)
+    free_b = free_index_from_player(bt_model, player_b)
+    if free_a is None and free_b is None:
+        return np.zeros(bt_model.X.shape[0], dtype=float)
+    if free_b is None:
+        return -amip.get_influence_1sN(free_a)
+    if free_a is None:
+        return amip.get_influence_1sN(free_b)
+    return -(amip.get_influence_1sN(free_a) - amip.get_influence_1sN(free_b))
 
 
 def _json_safe_value(value):
@@ -265,8 +287,16 @@ def compare_drop_to_baseline(
         baseline_free_index_to_name(bt_model, baseline[0]),
         baseline_free_index_to_name(bt_model, baseline[1]),
     )
+    influence_pair = baseline_pair if baseline_pair is not None else pairs[0]
+    objective = SkillGapObjective(player_a=influence_pair[0], player_b=influence_pair[1])
+    report = compute_all_action_influences(bt_model, objective, "drop", influence_method="1sn")
+    baseline_influence = baseline_drop_influence(LogisticAMIP(X, y, fit_intercept=False, penalty=None), bt_model, *influence_pair)
     ours_nested = ours["result"]
     row = {
+        "influence_pair": influence_pair,
+        "influence_match": bool(
+            np.allclose(report["influence"].to_numpy(dtype=float), baseline_influence, rtol=0.0, atol=1e-12)
+        ),
         "baseline_alpha": baseline_alpha,
         "our_alpha": None if ours["alpha"] is None else int(ours["alpha"]),
         "alpha_match": baseline_alpha == ours["alpha"],
@@ -431,7 +461,7 @@ def main() -> None:
     selected_matches_table.to_csv(output_dir / "all_datasets_top1_actions_selected_matches.csv", index=False)
 
     if args.assert_baseline_match:
-        required = ["alpha_match", "met_match", "pair_match", "initial_match", "final_match", "indices_match"]
+        required = ["influence_match", "alpha_match", "met_match", "pair_match", "initial_match", "final_match", "indices_match"]
         if not bool(baseline_table[required].to_numpy(dtype=bool).all()):
             raise AssertionError("Baseline comparison mismatch detected.")
 

@@ -133,7 +133,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--dataset-order",
-        choices=("alpha", "size_asc", "size_desc"),
+        choices=("provided", "alpha", "size_asc", "size_desc"),
         default="size_asc",
         help="How to order datasets before running the batch.",
     )
@@ -206,6 +206,8 @@ def parse_args() -> argparse.Namespace:
 
 def resolve_dataset_order(dataset_keys: list[str], order_mode: str) -> tuple[list[str], list[tuple[str, int]]]:
     keys = [str(key) for key in dataset_keys]
+    if order_mode == "provided":
+        return keys, []
     if order_mode == "alpha":
         ordered = sorted(keys)
         return ordered, []
@@ -267,8 +269,6 @@ def choose_stratified_random_ks(
 
     valid_ks = np.arange(min_k, max_k + 1, dtype=int)
     regions = [chunk for chunk in np.array_split(valid_ks, 3) if len(chunk) > 0]
-    if len(regions) < 3:
-        raise ValueError(f"Need at least three valid k regions, found only {len(regions)}.")
     return [int(rng.choice(region)) for region in regions]
 
 

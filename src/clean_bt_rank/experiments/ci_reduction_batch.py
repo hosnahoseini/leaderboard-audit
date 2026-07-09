@@ -18,6 +18,14 @@ DEFAULT_TARGET_QUANTILES: tuple[float, ...] = (0.1, 0.5, 0.9)
 
 METHOD_LABELS: dict[str, str] = {
     "influence": "Ours",
+    "influence_pairs": "Ours V1",
+    "influence_all_outcomes": "Ours V2",
+    "influence_weighted_outcomes": "Ours V3",
+    "influence_expected_pair": "Ours V4",
+    "influence_v1": "Ours V1",
+    "influence_v2": "Ours V2",
+    "influence_v3": "Ours V3",
+    "influence_v4": "Ours V4",
     "expected_pair": "Ours Active",
     "arena_active": "Arena Active",
     "arena_active_pair": "Arena Active Pair",
@@ -27,6 +35,14 @@ METHOD_LABELS: dict[str, str] = {
 
 METHOD_COLORS: dict[str, str] = {
     "influence": "#264653",
+    "influence_pairs": "#264653",
+    "influence_all_outcomes": "#3D5A80",
+    "influence_weighted_outcomes": "#6D597A",
+    "influence_expected_pair": "#1D3557",
+    "influence_v1": "#264653",
+    "influence_v2": "#3D5A80",
+    "influence_v3": "#6D597A",
+    "influence_v4": "#1D3557",
     "expected_pair": "#1D3557",
     "arena_active": "#2A9D8F",
     "arena_active_pair": "#3A9B92",
@@ -181,6 +197,7 @@ def run_named_dataset_ci_benchmark(
     random_seed: int = 0,
     policies: Sequence[str] | None = None,
     random_policy: str = "random",
+    outcome_mode: str = "deterministic",
 ) -> DatasetBenchmarkResult:
     built, dataset, bt_model = fit_named_dataset_model(dataset_key)
     target_table = choose_ci_targets(
@@ -207,6 +224,7 @@ def run_named_dataset_ci_benchmark(
             policies=list(policies) if policies is not None else ["influence", "arena_active"],
             candidate_mode=candidate_mode,
             random_policy=random_policy,
+            outcome_mode=outcome_mode,
         )
         history = history.copy()
         history["dataset_key"] = built["dataset_key"]
@@ -258,7 +276,22 @@ def _pairwise_win_rate(task_metrics: pd.DataFrame, winner_policy: str, loser_pol
 
 def build_summary_table(task_metrics: pd.DataFrame, *, primary_policy: str = "influence") -> pd.DataFrame:
     method_rows: list[dict[str, object]] = []
-    policy_order = ["influence", "expected_pair", "arena_active", "arena_active_pair", "random", "random_pair"]
+    policy_order = [
+        "influence",
+        "influence_pairs",
+        "influence_all_outcomes",
+        "influence_weighted_outcomes",
+        "influence_expected_pair",
+        "influence_v1",
+        "influence_v2",
+        "influence_v3",
+        "influence_v4",
+        "expected_pair",
+        "arena_active",
+        "arena_active_pair",
+        "random",
+        "random_pair",
+    ]
     policies = [policy for policy in policy_order if policy in set(task_metrics["policy"].astype(str))]
     n_tasks = int(task_metrics[["dataset_key", "target_player"]].drop_duplicates().shape[0])
     for policy in policies:
@@ -393,6 +426,7 @@ def run_ci_reduction_batch(
     policies: Sequence[str] | None = None,
     random_policy: str = "random",
     primary_policy: str = "influence",
+    outcome_mode: str = "deterministic",
 ) -> BatchBenchmarkResult:
     dataset_keys = list(dataset_keys)
     saved_output_dir: Path | None = None
@@ -415,6 +449,7 @@ def run_ci_reduction_batch(
                     "policies": list(policies) if policies is not None else None,
                     "random_policy": random_policy,
                     "primary_policy": primary_policy,
+                    "outcome_mode": outcome_mode,
                 },
                 indent=2,
                 sort_keys=True,
@@ -435,6 +470,7 @@ def run_ci_reduction_batch(
             random_seed=random_seed + 10_000 * idx,
             policies=policies,
             random_policy=random_policy,
+            outcome_mode=outcome_mode,
         )
         dataset_results.append(result)
 

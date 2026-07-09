@@ -119,7 +119,7 @@ def run_variant(bt_model: BradleyTerryModel, pairs: list[tuple[str, str]], spec:
     }
 
 
-def save_k_curve_plot(summary_df: pd.DataFrame, output_dir: Path) -> None:
+def save_k_curve_plot(summary_df: pd.DataFrame, output_dir: Path, *, dataset_key: str, dataset_name: str) -> None:
     plot_df = summary_df.copy()
     plot_df["variant_label"] = plot_df["variant"].map(ACTION_LABEL_MAP).fillna(plot_df["variant"])
     fig, ax = plt.subplots(figsize=(8.5, 4.8))
@@ -137,12 +137,12 @@ def save_k_curve_plot(summary_df: pd.DataFrame, output_dir: Path) -> None:
     ax.get_xaxis().set_major_formatter(plt.ScalarFormatter())
     ax.set_xlabel("Top-k boundary")
     ax.set_ylabel("Actions needed")
-    ax.set_title("Arena55k: actions needed to change top-k")
+    ax.set_title(f"{dataset_name}: actions needed to change top-k")
     ax.grid(True, axis="y", color="#d0d0d0", linewidth=0.7, alpha=0.7)
     ax.legend(frameon=False, ncol=2)
     fig.tight_layout()
-    fig.savefig(output_dir / "arena55k_topk_actions_needed_curve.pdf", bbox_inches="tight", pad_inches=0.02)
-    fig.savefig(output_dir / "arena55k_topk_actions_needed_curve.png", bbox_inches="tight", pad_inches=0.02)
+    fig.savefig(output_dir / f"{dataset_key}_topk_actions_needed_curve.pdf", bbox_inches="tight", pad_inches=0.02)
+    fig.savefig(output_dir / f"{dataset_key}_topk_actions_needed_curve.png", bbox_inches="tight", pad_inches=0.02)
     plt.close(fig)
 
 
@@ -152,11 +152,17 @@ def main() -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     built = build_named_dataset_model(str(args.dataset))
-    k_values = sorted({int(k) for k in args.k_values})
+    requested_k_values = sorted({int(k) for k in args.k_values})
     n_models = int(len(ranking_from_model(built["bt_model"])))
-    invalid = [k for k in k_values if k <= 0 or k >= n_models]
+    k_values = [k for k in requested_k_values if 1 <= k < n_models]
+    invalid = [k for k in requested_k_values if k not in k_values]
+    if not k_values:
+        raise ValueError(f"No valid k values remain for n_models={n_models}; requested: {requested_k_values}")
     if invalid:
-        raise ValueError(f"Each k must satisfy 1 <= k < n_models={n_models}; got invalid values: {invalid}")
+        print(
+            f"Skipping invalid k values for {built['dataset_key']} with n_models={n_models}: {invalid}",
+            flush=True,
+        )
 
     max_actions = compute_max_actions(len(built["raw"]), args.max_action_fraction)
     all_rows: list[dict[str, object]] = []
@@ -191,8 +197,8 @@ def main() -> None:
         all_rows.extend(summary_df.to_dict(orient="records"))
 
     final_df = pd.DataFrame(all_rows).sort_values(["k", "variant"]).reset_index(drop=True)
-    final_df.to_csv(output_dir / "arena55k_topk_actions_needed_summary.csv", index=False)
-    save_k_curve_plot(final_df, output_dir)
+    final_df.to_csv(output_dir / f"{built['dataset_key']}_topk_actions_needed_summary.csv", index=False)
+    save_k_curve_plot(final_df, output_dir, dataset_key=built["dataset_key"], dataset_name=built["dataset_name"])
     (output_dir / "run_metadata.json").write_text(
         json.dumps(
             {
