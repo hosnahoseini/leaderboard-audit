@@ -622,7 +622,7 @@ INIT.finger=function(){
       ctx.fillStyle="#5b6577"; ctx.font="9px ui-monospace,monospace"; ctx.textAlign="center"; ctx.textBaseline="middle"; for(var i2=0;i2<3;i2++){var a=ang(i2); ctx.fillText(AX[i2].lab,cxc+(R+12)*Math.cos(a),cyc+(R+10)*Math.sin(a));}
       ctx.beginPath(); AX.forEach(function(ax,i){var v=Math.max(0,Math.min(1,d[ax.k])),a=ang(i),x=cxc+R*v*Math.cos(a),y=cyc+R*v*Math.sin(a); i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}); ctx.closePath(); ctx.fillStyle=col+"2c"; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=2; ctx.stroke();
       AX.forEach(function(ax,i){var v=Math.max(0,Math.min(1,d[ax.k])),a=ang(i),x=cxc+R*v*Math.cos(a),y=cyc+R*v*Math.sin(a); ctx.fillStyle=col; ctx.beginPath(); ctx.arc(x,y,2.6,0,7); ctx.fill();});
-      ctx.fillStyle="#1a2233"; ctx.font="600 12px system-ui"; ctx.textAlign="center"; ctx.fillText(d.name,cxc,cyc+R+24); ctx.fillStyle="#414b5b"; ctx.font="10px ui-monospace,monospace"; ctx.fillText("R="+d.all.toFixed(2)+" · break #1 in "+Math.round(d.min_actions),cxc,cyc+R+38);});
+      ctx.fillStyle="#1a2233"; ctx.font="600 12px system-ui"; ctx.textAlign="center"; ctx.fillText(d.name,cxc,cyc+R+24); ctx.fillStyle="#414b5b"; ctx.font="10px ui-monospace,monospace"; ctx.fillText("R="+(d.all*100).toFixed(2)+"% · break #1 in "+Math.round(d.min_actions),cxc,cyc+R+38);});
   }
   RESIZE.finger=function(){draw();}; draw();
 };
