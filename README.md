@@ -1,6 +1,7 @@
 # Leaderboard Audit
 
 [![Tests](https://github.com/hosnahoseini/leaderboard-audit/actions/workflows/ci.yml/badge.svg)](https://github.com/hosnahoseini/leaderboard-audit/actions/workflows/ci.yml)
+[![arXiv](https://img.shields.io/badge/arXiv-2605.15761-b31b1b.svg)](https://arxiv.org/abs/2605.15761)
 [![Website](https://img.shields.io/badge/website-companion%20site-2c6e8f.svg)](https://hosnahoseini.github.io/leaderboard-audit/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
@@ -10,10 +11,12 @@ pairwise preference data, estimates the **influence** of individual matches on t
 resulting ranking, and measures how many data edits — dropping, flipping, or
 adding matches — are needed to change a ranking outcome.
 
-It contains the code behind *A Unified Perturbation Framework for Leaderboard
-Stability and Manipulation* — Hosna Oyarhoseini, Jimmy Lin, Amir-Hossein Karimi —
-presented as an **oral at the CTB Workshop @ ICML 2026** — together with the
-scripts that regenerate the published figures.
+It contains the code behind *A Unified Perturbation Framework for Analyzing
+Leaderboard Stability and Manipulation* — Hosna Oyarhoseini, Jimmy Lin,
+Amir-Hossein Karimi — presented as an **oral at the CTB Workshop @ ICML 2026** —
+together with the scripts that regenerate the published figures.
+
+**[Read the paper on arXiv →](https://arxiv.org/abs/2605.15761)** (arXiv:2605.15761)
 
 **[Explore the interactive companion site →](https://hosnahoseini.github.io/leaderboard-audit/)**
 It walks through the perturbation framework chapter by chapter, with a live
@@ -179,6 +182,23 @@ Alignment), used as the comparison baseline in `tests/test_isrankingrobust_parit
 It is redistributed under its own MIT license (© 2025 Jenny Huang); see
 `IsRankingRobust/LICENSE`. Its upstream `unit_tests/` contain interactive
 `breakpoint()` calls and are excluded from collection via `norecursedirs`.
+
+## Citation
+
+If you use this code, please cite the paper:
+
+```bibtex
+@article{oyarhoseini2026unified,
+  title   = {A Unified Perturbation Framework for Analyzing Leaderboard Stability and Manipulation},
+  author  = {Oyarhoseini, Hosna and Lin, Jimmy and Karimi, Amir-Hossein},
+  journal = {arXiv preprint arXiv:2605.15761},
+  year    = {2026},
+  eprint       = {2605.15761},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.LG},
+  url     = {https://arxiv.org/abs/2605.15761}
+}
+```
 
 ## License
 

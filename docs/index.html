@@ -13,6 +13,8 @@
   .nav .ch{font-family:var(--mono);font-size:.72rem;color:var(--dim);min-width:16px;} .nav button.active .ch{color:var(--blue);}
   .nav .lab{line-height:1.25;} .nav .lab small{display:block;color:var(--dim);font-size:.7rem;font-weight:400;}
   .side-foot{margin-top:auto;color:var(--dim);font-size:.72rem;line-height:1.5;}
+  .side-foot .paper{display:block;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #12233b24;font-family:var(--mono);font-size:.7rem;letter-spacing:.04em;color:var(--blue);text-decoration:none;}
+  .side-foot .paper:hover{text-decoration:underline;}
   main{padding:clamp(22px,3.5vw,46px) clamp(18px,4vw,52px) 70px;}
   .view{display:none;animation:fade .35s ease;} .view.active{display:block;}
   @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
@@ -100,7 +102,8 @@
   <nav class="side">
     <div class="brand"><b>Leaderboard Audit</b>A Unified Perturbation Framework</div>
     <div class="nav" id="nav"></div>
-    <div class="side-foot">Objective curves show <b>actual refit values</b>. Top-1/In-out/τ run live; others use recorded runs.</div>
+    <div class="side-foot"><a class="paper" href="https://arxiv.org/abs/2605.15761" target="_blank" rel="noopener">Read the paper · arXiv:2605.15761 ↗</a>
+      Objective curves show <b>actual refit values</b>. Top-1/In-out/τ run live; others use recorded runs.</div>
   </nav>
   <main>
     <section class="view active" id="v-overview">
@@ -110,7 +113,8 @@
         <div class="pipe"><div class="step"><div class="k">Input</div><div class="t">Pairwise votes</div><div class="d">fit one base Bradley–Terry model</div></div><div class="arrow">→</div><div class="step"><div class="k">Engine</div><div class="t">Influence scores</div><div class="d">rank candidate actions, no refitting</div></div><div class="arrow">→</div><div class="step"><div class="k">Act</div><div class="t">Greedy Drop·Add·Flip</div><div class="d">apply the highest-leverage change</div></div></div>
         <div class="audits" id="audits"></div>
       </div>
-      <footer class="foot">From <em>A Unified Perturbation Framework for Leaderboard Stability and Manipulation</em>.</footer>
+      <footer class="foot">From <em>A Unified Perturbation Framework for Analyzing Leaderboard Stability and Manipulation</em>,
+        an oral at the CTB Workshop @ ICML 2026. Read the paper: <a href="https://arxiv.org/abs/2605.15761" target="_blank" rel="noopener">arXiv:2605.15761</a>.</footer>
     </section>
 
     <section class="view" id="v-matchspec">
