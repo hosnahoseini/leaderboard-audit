@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+title: "Leaderboard Audit"
+message: "If you use this software, please cite the thesis below."
+type: software
+authors:
+  - family-names: Oyarhoseini
+    given-names: Hosna
+repository-code: "https://github.com/hosnahoseini/leaderboard-audit"
+license: MIT
+
+references:
+  - type: thesis
+    title: "A Unified Perturbation Framework for Analyzing Leaderboard Stability and Manipulation"
+    authors:
+      - family-names: Oyarhoseini
+        given-names: Hosna
+    thesis-type: "Master's thesis"
+    institution:
+      name: "University of Waterloo"
+    year: 2026
