@@ -138,7 +138,7 @@
         objective curve (<b>actual refit values</b>), and the leaderboard change — with the goal marked reached or not.
         The <b>Influence ranking</b> panel shows the full pool of candidate matches, sorted by influence; the greedy
         engine simply walks down it — watch each pick light up as you apply actions. In/out Top-k restricts the
-        attacker to <b>injecting new votes</b>, so it also shows every outcome available on the pair it lands on.</p>
+        attacker to <b>injecting new votes</b>, so it shows every outcome available on the pair it lands on instead.</p>
       <div class="sandbox-bar">
         <span class="lbl">Objective</span><div class="seg" id="sbObj"></div>
         <span class="lbl hide" id="sbKLbl">k</span><div class="seg hide" id="sbK"></div>
@@ -350,8 +350,9 @@ INIT.sandbox=function(){
     if(objk==="topkci")return CANDS["tk|"+fk+"|"+fmethod+"|"+action];
     if(objk==="cwhole")return CANDS["cw|"+action];
     if(objk==="cplayer")return CANDS["cp|"+selPlayer];
-    // in/out recomputes its pool every step (omniscient refit), so the list is per-step
-    if(objk==="inout")return CANDS["io|"+idir+ik];
+    // in/out's pool is degenerate — every top candidate is "some weak model beats the
+    // reference", all within ~0.001 of each other. The outcome menu is the real story,
+    // so the ranking panel stays hidden. (The io| entries are still embedded.)
     return null;
   }
   function canonMatch(m){
